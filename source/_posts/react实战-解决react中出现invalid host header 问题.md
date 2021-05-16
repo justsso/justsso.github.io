@@ -1,6 +1,6 @@
 ---
 title: 解决react中出现invalid host header问题
-data: 2018-10-12
+date: 2018-10-12
 ---
 
 # 解决react中出现invalid host header问题
