@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>上传与下载 | justsso</title>
+  <meta name="description" content="前端必备-上传与下载 掘金文章链接 Koa2 之文件上传下载 koa 中的examples 前端压缩图片  想搞一下，不同文件上传的不同处理。图片上传，pdf上传。怎么上传到自己的服务器，怎么上传到七牛云中。 想搞一下，通过url下载文件，图片文件，excel文件，pdf文件在前端页面和node中是怎么处理的。 场景1: ant-design Upload 组件使用,后台使用koa2reac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="上传与下载">
+<meta property="og:url" content="https://justsso.github.io/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/index.html">
+<meta property="og:site_name" content="Justsso的博客">
+<meta property="og:description" content="前端必备-上传与下载 掘金文章链接 Koa2 之文件上传下载 koa 中的examples 前端压缩图片  想搞一下，不同文件上传的不同处理。图片上传，pdf上传。怎么上传到自己的服务器，怎么上传到七牛云中。 想搞一下，通过url下载文件，图片文件，excel文件，pdf文件在前端页面和node中是怎么处理的。 场景1: ant-design Upload 组件使用,后台使用koa2reac">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-01-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-12T15:48:45.434Z">
+<meta property="article:author" content="justsso">
+<meta property="article:tag" content="前端,javascript,react,redux,css,工程化">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://justsso.github.io/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/justsso" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">justsso</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">前端程序媛</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/css/">css</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/es6/">es6</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javasscript/">javasscript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/react/">react</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87/">前端必备</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">koa2中间件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="tag">事件循环</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" rel="tag">开发者工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 13px;">koa2中间件</a> <a href="/tags/npm/" style="font-size: 13.5px;">npm</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 13px;">事件循环</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 13px;">安全</a> <a href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">开发者工具</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 13px;">数组</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 13.5px;">模块化</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13px;">爬虫</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/13/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="title">解决react中出现invalid host header问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-12T16:07:47.891Z" itemprop="datePublished">2021-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/02/%E8%81%8A%E8%81%8Areact%20fiber%E6%9E%B6%E6%9E%84/" class="title">聊聊react fiber架构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-01T16:00:00.000Z" itemprop="datePublished">2021-05-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/09/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91JavaScript%E6%A8%A1%E5%9D%97%E7%AE%80%E5%8F%B2/" class="title">【转载】JavaScript模块简史</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-08T16:00:00.000Z" itemprop="datePublished">2020-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/13/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E8%AE%B2%E8%A7%A3%E6%95%B0%E7%BB%84%E7%9A%84reduce%E7%94%A8%E6%B3%95/" class="title">由浅入深讲解数组的reduce用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished">2020-07-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%AE%89%E5%85%A8/" class="title">浏览器中的安全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-前端必备-上传与下载" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      上传与下载
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" class="article-date">
+	  <time datetime="2019-01-23T16:00:00.000Z" itemprop="datePublished">2019-01-24</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="前端必备-上传与下载"><a href="#前端必备-上传与下载" class="headerlink" title="前端必备-上传与下载"></a>前端必备-上传与下载</h1><ul>
+<li><a href="!https://juejin.im/post/5c3c4b3551882524a5420119">掘金文章链接</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000014056810">Koa2 之文件上传下载</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/koajs/examples">koa 中的examples</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.qingpingshan.com/jb/javascript/400820.html">前端压缩图片</a></li>
+</ul>
+<p>想搞一下，不同文件上传的不同处理。图片上传，pdf上传。怎么上传到自己的服务器，怎么上传到七牛云中。</p>
+<p>想搞一下，通过url下载文件，图片文件，excel文件，pdf文件在前端页面和node中是怎么处理的。</p>
+<h2 id="场景1-ant-design-Upload-组件使用-后台使用koa2"><a href="#场景1-ant-design-Upload-组件使用-后台使用koa2" class="headerlink" title="场景1: ant-design Upload 组件使用,后台使用koa2"></a>场景1: ant-design Upload 组件使用,后台使用koa2</h2><p>react 代码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;Upload</span><br><span class="line">    name=<span class="string">&quot;image&quot;</span></span><br><span class="line">    accept=&#123;<span class="string">&quot;.bmp,.png,.jpeg,.jpg,.gif&quot;</span>&#125;</span><br><span class="line">    multiple=&#123;<span class="literal">true</span>&#125;</span><br><span class="line">    action=&#123;<span class="string">&#x27;/api/upload?type=image&#x27;</span>&#125;</span><br><span class="line">    onChange=&#123;<span class="function"><span class="params">info</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">//上传中、完成、失败都会调用这个函数</span></span><br><span class="line">    <span class="comment">// console.log(info.file, 39);</span></span><br><span class="line">    <span class="comment">// info.file.status = uploading done error removed</span></span><br><span class="line">        <span class="keyword">if</span> (info.file.status !== <span class="string">&#x27;uploading&#x27;</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (info.file.status === <span class="string">&#x27;done&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (info.file.response.code === <span class="number">200</span>) &#123;                                      message.success(<span class="string">`<span class="subst">$&#123;info.file.name&#125;</span> 上传成功`</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (info.file.status === <span class="string">&#x27;error&#x27;</span>) &#123;</span><br><span class="line">                        message.error(<span class="string">`<span class="subst">$&#123;info.file.name&#125;</span> <span class="subst">$&#123;info.file.response.info&#125;</span>`</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">   <span class="comment">// console.log(info.event)</span></span><br><span class="line"> &#125;&#125;</span><br><span class="line">&gt;</span><br><span class="line">    &lt;Button type=<span class="string">&quot;primary&quot;</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">Icon</span> <span class="attr">type</span>=<span class="string">&quot;upload&quot;</span>/&gt;</span></span>上传&lt;/Button&gt;</span><br><span class="line">&lt;/Upload&gt;</span><br></pre></td></tr></table></figure>
+
+<p>koa2中的代码： koa2 中使用的中间件是koa-body </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">app.use(bodyParser(&#123;</span><br><span class="line">    multipart: true,</span><br><span class="line">    formidable: &#123;</span><br><span class="line">        maxFileSize: 200 * 1024 * 1024, &#x2F;&#x2F;单个文件的最大限制</span><br><span class="line">        maxFieldsSize: 200 * 1024 * 1024 &#x2F;&#x2F;所有文件，整个表单的大小限制</span><br><span class="line">    &#125;</span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;上传素材</span><br><span class="line">router.post(&#39;&#x2F;upload&#39;, async (ctx, next) &#x3D;&gt; &#123;</span><br><span class="line">    &#x2F;&#x2F; console.log(&#39;这里是上传素材中心&#39;);</span><br><span class="line">    &#x2F;&#x2F; console.log(ctx.request.files.images, 202);</span><br><span class="line">    try &#123;</span><br><span class="line">        &#x2F;&#x2F;创建文件可读流，把文件存储到本地</span><br><span class="line">        let type &#x3D; ctx.query.type;</span><br><span class="line">        let file &#x3D; ctx.request.files[type];</span><br><span class="line">        console.log(file);</span><br><span class="line">        if (file) &#123;</span><br><span class="line">            let fsread &#x3D; fs.createReadStream(file.path);   &#x2F;&#x2F;创建文件可读流</span><br><span class="line">            let ext &#x3D; file.name.split(&#39;.&#39;).pop(); &#x2F;&#x2F;获取文件后缀</span><br><span class="line">            if (file.size &lt;&#x3D; fileControl[type].size) &#123;</span><br><span class="line">                if (fileControl[type].accept.indexOf(ext) !&#x3D;&#x3D; -1) &#123;</span><br><span class="line">                    let uploadPath &#x3D; path.resolve(__dirname, defaultUploadPath);</span><br><span class="line">                    if (!fs.existsSync(uploadPath)) &#123;</span><br><span class="line">                        mkdirp.sync(uploadPath)</span><br><span class="line">                    &#125;</span><br><span class="line">                    &#x2F;&#x2F;查看是否存在同名文件</span><br><span class="line">                    if (fs.existsSync(uploadPath + &#39;&#x2F;&#39; + file.name)) &#123;</span><br><span class="line">                        ctx.response.status &#x3D; 500;</span><br><span class="line">                        ctx.response.body &#x3D; &#123;</span><br><span class="line">                            code: 500,</span><br><span class="line">                            info: &#39;存在同名文件&#39;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; else &#123;</span><br><span class="line">                        let fswrite &#x3D; fs.createWriteStream(uploadPath + &#39;&#x2F;&#39; + file.name);</span><br><span class="line">                        await fsread.pipe(fswrite);</span><br><span class="line">                        ctx.body &#x3D; &#123;</span><br><span class="line">                            code: 200,</span><br><span class="line">                            info: &#39;ok&#39;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    ctx.response.status &#x3D; 500;</span><br><span class="line">                    ctx.body &#x3D; &#123;</span><br><span class="line">                        code: 500,</span><br><span class="line">                        info: &#96;文件仅支持$&#123;fileControl[type].accept&#125;格式&#96;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                ctx.response.status &#x3D; 500;</span><br><span class="line">                ctx.body &#x3D; &#123;</span><br><span class="line">                    code: 500,</span><br><span class="line">                    info: &#96;文件体积超过$&#123;fileControl[type].info&#125;&#96;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            ctx.response.status &#x3D; 500;</span><br><span class="line">            ctx.body &#x3D; &#123;</span><br><span class="line">                code: 500,</span><br><span class="line">                info: &#39;未找到上传文件&#39;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; catch (e) &#123;</span><br><span class="line">        console.log(e);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="场景2-原生js-与-a-标签使用"><a href="#场景2-原生js-与-a-标签使用" class="headerlink" title="场景2: 原生js 与 a 标签使用"></a>场景2: 原生js 与 a 标签使用</h2><h2 id="场景3-axios、koa2-实现上传"><a href="#场景3-axios、koa2-实现上传" class="headerlink" title="场景3: axios、koa2 实现上传"></a>场景3: axios、koa2 实现上传</h2><h2 id="场景4-上传到微信公众平台"><a href="#场景4-上传到微信公众平台" class="headerlink" title="场景4: 上传到微信公众平台"></a>场景4: 上传到微信公众平台</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;创建永久素材</span><br><span class="line">async function uploadMaterial(access_token, filePath, mediaType) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        return new Promise((resolve, reject) &#x3D;&gt; &#123;</span><br><span class="line">            exec(&#96;curl -F media&#x3D;@$&#123;filePath&#125; &quot;https:&#x2F;&#x2F;api.weixin.qq.com&#x2F;cgi-bin&#x2F;material&#x2F;add_material?access_token&#x3D;$&#123;access_token&#125;&amp;type&#x3D;$&#123;mediaType&#125;&quot; &#96;, (er, result) &#x3D;&gt; &#123;</span><br><span class="line">                er &amp;&amp; console.log(er, 346);</span><br><span class="line">                console.log(result, 347);</span><br><span class="line">                if (result) &#123;</span><br><span class="line">                    resolve(result)</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    reject(null)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125; catch (e) &#123;</span><br><span class="line">        console.log(e.message, 130);</span><br><span class="line">        throw (e)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="场景5-上传到七牛云空间"><a href="#场景5-上传到七牛云空间" class="headerlink" title="场景5: 上传到七牛云空间"></a>场景5: 上传到七牛云空间</h2><h2 id="HTML5中的文件上传知识"><a href="#HTML5中的文件上传知识" class="headerlink" title="HTML5中的文件上传知识"></a>HTML5中的文件上传知识</h2><p>文章链接：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/Input/file"><code>&lt;input type=&quot;file&quot;&gt;</code></a></p>
+<p>原生的，原理一定要会</p>
+<h2 id="服务端处理文件，主要使用“流”"><a href="#服务端处理文件，主要使用“流”" class="headerlink" title="服务端处理文件，主要使用“流”"></a>服务端处理文件，主要使用“流”</h2><p>读入流、写入流、管道</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a style="display: inline-block;
+      word-break: break-word;" href="https://justsso.github.io/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/" title="上传与下载" target="_blank" rel="external">https://justsso.github.io/2019/01/24/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87-%E4%B8%8A%E4%BC%A0%E4%B8%8E%E4%B8%8B%E8%BD%BD/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/justsso" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/justsso" target="_blank"><span class="text-dark">justsso</span><small class="ml-1x">前端程序媛</small></a></h3>
+        <div>记录学习与工作的地方</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/02/06/%E5%AF%B9%E8%B1%A1/" title="js对象"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/01/09/git%20%E5%AD%A6%E4%B9%A0-.gitignore%E6%96%87%E4%BB%B6%E4%BA%86%E8%A7%A3%E4%B8%80%E4%B8%8B%EF%BC%9F/" title=".gitignore文件了解一下"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

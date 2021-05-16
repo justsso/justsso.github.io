@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>create react app脚手架 | justsso</title>
+  <meta name="description" content="入门更新到新版本create-react-app被分成两个包。  create-react-app 是一个全局的命令行包，用来创建新的项目 react-scripts 是一个新创建的项目中的开发依赖  你几乎从来不需要更新create-react-app本身，它委托所有配置给react-scripts 当你运行create-react-app时，它总是用最新版本的react-scripts 创建">
+<meta property="og:type" content="article">
+<meta property="og:title" content="create react app脚手架">
+<meta property="og:url" content="https://justsso.github.io/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/index.html">
+<meta property="og:site_name" content="Justsso的博客">
+<meta property="og:description" content="入门更新到新版本create-react-app被分成两个包。  create-react-app 是一个全局的命令行包，用来创建新的项目 react-scripts 是一个新创建的项目中的开发依赖  你几乎从来不需要更新create-react-app本身，它委托所有配置给react-scripts 当你运行create-react-app时，它总是用最新版本的react-scripts 创建">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-11-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-12T16:14:08.748Z">
+<meta property="article:author" content="justsso">
+<meta property="article:tag" content="前端,javascript,react,redux,css,工程化">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://justsso.github.io/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/justsso" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">justsso</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">前端程序媛</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/css/">css</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/es6/">es6</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javasscript/">javasscript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/react/">react</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87/">前端必备</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">koa2中间件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="tag">事件循环</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" rel="tag">开发者工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 13px;">koa2中间件</a> <a href="/tags/npm/" style="font-size: 13.5px;">npm</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 13px;">事件循环</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 13px;">安全</a> <a href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">开发者工具</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 13px;">数组</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 13.5px;">模块化</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13px;">爬虫</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/13/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="title">解决react中出现invalid host header问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-12T16:07:47.891Z" itemprop="datePublished">2021-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/02/%E8%81%8A%E8%81%8Areact%20fiber%E6%9E%B6%E6%9E%84/" class="title">聊聊react fiber架构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-01T16:00:00.000Z" itemprop="datePublished">2021-05-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/09/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91JavaScript%E6%A8%A1%E5%9D%97%E7%AE%80%E5%8F%B2/" class="title">【转载】JavaScript模块简史</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-08T16:00:00.000Z" itemprop="datePublished">2020-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/13/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E8%AE%B2%E8%A7%A3%E6%95%B0%E7%BB%84%E7%9A%84reduce%E7%94%A8%E6%B3%95/" class="title">由浅入深讲解数组的reduce用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished">2020-07-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%AE%89%E5%85%A8/" class="title">浏览器中的安全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-react学习-create react app 脚手架" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      create react app脚手架
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/" class="article-date">
+	  <time datetime="2018-11-09T16:00:00.000Z" itemprop="datePublished">2018-11-10</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="入门"><a href="#入门" class="headerlink" title="入门"></a>入门</h2><h3 id="更新到新版本"><a href="#更新到新版本" class="headerlink" title="更新到新版本"></a>更新到新版本</h3><p><code>create-react-app</code>被分成两个包。</p>
+<ul>
+<li><code>create-react-app</code> 是一个全局的命令行包，用来创建新的项目</li>
+<li><code>react-scripts</code> 是一个新创建的项目中的开发依赖</li>
+</ul>
+<p>你几乎从来不需要更新<code>create-react-app</code>本身，它委托所有配置给<code>react-scripts</code></p>
+<p>当你运行<code>create-react-app</code>时，它总是用最新版本的<code>react-scripts</code> 创建项目。所以，你将自动的在新创建的app中使用新的特性。</p>
+<p>将已有的项目更新到新版本的<code>react-scripts</code>,打开你文件目录中的<code>package.json</code>,迁移到新的版本。</p>
+<h2 id="开发"><a href="#开发" class="headerlink" title="开发"></a>开发</h2><h3 id="设置编辑器"><a href="#设置编辑器" class="headerlink" title="设置编辑器"></a>设置编辑器</h3><p>如果正确的配置，create-react-app 附带了很多改善编辑体验的工具。这里是几条最大化生产力的技巧：</p>
+<h4 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h4><h4 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h4><p>目前只有VS和webStorm支持刺功能。</p>
+<p>Visual Studio Code和WebStorm支持使用Create React App开箱即用的调试。这使您作为开发人员可以在不离开编辑器的情况下编写和调试React代码，最重要的是，它使您能够拥有连续开发工作流，其中上下文切换最小，因为您不必在工具之间切换。</p>
+<h3 id="分离状态-开发组件"><a href="#分离状态-开发组件" class="headerlink" title="分离状态 开发组件"></a>分离状态 开发组件</h3><h3 id="分析打包体积"><a href="#分析打包体积" class="headerlink" title="分析打包体积"></a>分析打包体积</h3><p><code>source-map-explorer</code>使用source maps 分析javascript包，这帮助你理解代码膨胀的来源。</p>
+<ol>
+<li><code>npm install --save source-map-explorer</code></li>
+<li>在package.json中增加一行</li>
+</ol>
+<p>  <code>“scripts”: &#123;      &quot;analyze&quot;: &quot;source-map-explorer build/static/js/main.*&quot;   &#125;</code><br>3. 执行打包命令和分析 命令</p>
+<p><code>npm run build</code></p>
+<p><code>npm run analyze</code></p>
+<h3 id="开发中使用https"><a href="#开发中使用https" class="headerlink" title="开发中使用https"></a>开发中使用https</h3><p>你可能需要开发服务器通过https来提供页面。一个特殊的例子是，当api服务器本身是https服务时，使用代理功能将请求代理到api服务器，这可能非常有用。</p>
+<p><strong>Windows (cmd.exe)</strong></p>
+<p><code>set HTTPS=true&amp;&amp; npm start</code></p>
+<p><strong>Windows (Powershell)</strong></p>
+<p><code>($env:HTTPS = &quot;true&quot;) -add (npm start)</code><br><strong>Linux, macOS(Bash)</strong></p>
+<p><code>HTTPS=true npm start</code></p>
+<p>请注意，服务器将使用自签名证书，因此您的Web浏览器在访问页面时几乎肯定会显示警告。</p>
+<h2 id="Style-and-Assets"><a href="#Style-and-Assets" class="headerlink" title="Style and Assets"></a>Style and Assets</h2><p>这个项目设置使用webpack处理各种资产，webpack提供了一种超越Javascript的自定义方式的扩展概念import。表示js文件依赖一个css文件，你需要<code>import the css from the javascript file</code>.</p>
+<p>import 引入</p>
+<h3 id="添加css模块"><a href="#添加css模块" class="headerlink" title="添加css模块"></a>添加css模块</h3><p>css文件[name].module.css为扩展，则开启了css 模块。css模块使你在不同的文件中<br>使用相同class名字，也不会报错，不会有命名冲突。</p>
+<p>例子：<br><strong>Button.module.css</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Button.module.css</span><br><span class="line">.error &#123;</span><br><span class="line">  background-color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>another-stylesheet.css</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.error &#123;</span><br><span class="line">  color: red;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Button.js</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; Component &#125; from &#39;react&#39;;</span><br><span class="line">import styles from &#39;.&#x2F;Button.module.css&#39;; &#x2F;&#x2F; Import css modules stylesheet as styles</span><br><span class="line">import &#39;.&#x2F;another-stylesheet.css&#39;; &#x2F;&#x2F; Import regular stylesheet</span><br><span class="line"></span><br><span class="line">class Button extends Component &#123;</span><br><span class="line">  render() &#123;</span><br><span class="line">    &#x2F;&#x2F; reference as a js object</span><br><span class="line">    return &lt;button className&#x3D;&#123;styles.error&#125;&gt;Error Button&lt;&#x2F;button&gt;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>button真正的类名是 <code>.Button_error__1gR1K</code></p>
+<h3 id="增加SASS-样式"><a href="#增加SASS-样式" class="headerlink" title="增加SASS 样式"></a>增加SASS 样式</h3><p><code>npm install node-sass --save</code></p>
+<p>文件会被自动编译的，如果被引入的文件明拓展是<code>.scss</code>或者<code>.sass</code></p>
+<p>sass还是可以自定义变量，使用@import 来引入文件</p>
+<h3 id="post-processing-CSS"><a href="#post-processing-CSS" class="headerlink" title="post-processing CSS"></a>post-processing CSS</h3><p>自动添加浏览器前缀</p>
+<h4 id="添加图像，字体和文件"><a href="#添加图像，字体和文件" class="headerlink" title="添加图像，字体和文件"></a>添加图像，字体和文件</h4><p>使用 import 引入 .bmp  .gif  .jpeg  .png ，大小小于10000字节的图像将返回数据uri,</p>
+<p>svg 文件可以直接被导入作为React组件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import &#123; ReactComponent as Logo &#125; from &#39;.&#x2F;logo.svg&#39;;</span><br><span class="line">const App &#x3D; () &#x3D;&gt; (</span><br><span class="line">  &lt;div&gt;</span><br><span class="line">    &#123;&#x2F;* Logo is an actual React component *&#x2F;&#125;</span><br><span class="line">    &lt;Logo &#x2F;&gt;</span><br><span class="line">  &lt;&#x2F;div&gt;</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用public-文件夹"><a href="#使用public-文件夹" class="headerlink" title="使用public 文件夹"></a>使用public 文件夹</h3><p>可以修改publick文件夹下的html文件，比如设置页面标题，<code>&lt;script&gt;</code>标签在打包的程序中会自动生成并添加到代码中。</p>
+<p>使用 import的好处：</p>
+<ol>
+<li>script和stylesheets被缩小和打包来减少额外的网络请求</li>
+<li>缺少文件会导致编译错误，而不是4040错误</li>
+<li>结果文件名包含内容哈希，因此您无需担心浏览器缓存旧版本</li>
+</ol>
+<p>public文件下的内容不会被webpack打包的，public文件夹下的资源是会被复制到构建文件夹中的，要引用public文件夹中的资源，需要使用一个名为的特殊变量PUBLIC_URL</p>
+<p><code>&lt;link rel=&quot;shortcut icon&quot; href=&quot;%PUBLIC_URL%/favicon.ico&quot;&gt;</code></p>
+<p>当运行时npm run build，Create React App将替换%PUBLIC_URL%为正确的绝对路径<br><strong>什么时候使用public文件夹</strong></p>
+<ol>
+<li>您需要在构建输出中具有特定名称的文件，例如manifest.webmanifest <em>（原因可能是：webpack对它无法打包）</em></li>
+<li>您有数千个图像，需要动态引入他们的路径  <em>（原因可能是：减少import带来的编译成本）</em></li>
+<li>希望在打包代码中包含一个小的脚本</li>
+<li>有一些库可能和webpack有冲突，你没有别的选择只能用<code>script</code>标签引入</li>
+</ol>
+<p>如果使用<code>script</code> 标签引入的话，是全局变量</p>
+<h3 id="代码拆分"><a href="#代码拆分" class="headerlink" title="代码拆分"></a>代码拆分</h3><p><code>import()</code>动态引入，进行代码分割。import()函数的形式将模块名称作为参数并返回一个Promise总是解析为模块的名称空间对象的形式。<br><strong>使用react路由进行代码拆分</strong>  [!<a target="_blank" rel="noopener" href="https://serverless-stack.com/chapters/code-splitting-in-create-react-app.html]">https://serverless-stack.com/chapters/code-splitting-in-create-react-app.html]</a></p>
+<h2 id="构建你的App"><a href="#构建你的App" class="headerlink" title="构建你的App"></a>构建你的App</h2><h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><p>生成的项目包括react和react dom 作为依赖，它还包括create-react-app 用作开发依赖项的椅子脚本。它还需要安装其他依赖：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --save react-router-dom</span><br></pre></td></tr></table></figure>
+
+<h3 id="导入组件"><a href="#导入组件" class="headerlink" title="导入组件"></a>导入组件</h3><p>由于Webpack，该项目设置支持ES6模块。<br>虽然你仍然可以使用require()和module.exports，我们鼓励您使用import和export替代。</p>
+<p>一个文件最多只有一个默认导出和许多有名的exports</p>
+<h3 id="使用全局变量"><a href="#使用全局变量" class="headerlink" title="使用全局变量"></a>使用全局变量</h3><p>可以通过从window对象中显式读取全局变量来避免linter警告，因为 linter看不到变量的定义</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> $ = <span class="built_in">window</span>.$;</span><br></pre></td></tr></table></figure>
+
+<h3 id="增加Bootstrap"><a href="#增加Bootstrap" class="headerlink" title="增加Bootstrap"></a>增加Bootstrap</h3><p><code>npm install --save reactstrap bootstrap@4</code></p>
+<p>在<code>src/index.js</code>文件开头引入bootstrap css文件，和可选的bootstrap 主题</p>
+<p><code>import &#39;bootstrap/dist/css/bootstrap.css&#39;;</code></p>
+<p>在<code>src/App.js</code>文件活自定义文件中导入所需的reactstrap 组件</p>
+<p><code>import &#123; Button &#125; from &#39;reactstrap&#39;;</code></p>
+<h3 id="增加Flow"><a href="#增加Flow" class="headerlink" title="增加Flow"></a>增加Flow</h3><p><code>npm install --save flow-bin</code></p>
+<p>它是分析打包之后的包中各个模块的体积大小的</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a style="display: inline-block;
+      word-break: break-word;" href="https://justsso.github.io/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/" title="create react app脚手架" target="_blank" rel="external">https://justsso.github.io/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/justsso" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/justsso" target="_blank"><span class="text-dark">justsso</span><small class="ml-1x">前端程序媛</small></a></h3>
+        <div>记录学习与工作的地方</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/11/18/call%20apply%20bind/" title="call apply bind"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/" title="一次痛苦又甜蜜的微信支付踩坑之旅"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>微信小程序开发经验之登录 | justsso</title>
+  <meta name="description" content="小程序一般是在app onLaunch程序初始化时，检测用户是否登录过，（查看localStorage中是否有登录标志），然后wx.checkSession() 接口来判断session_key是否过期作为用户登录状态是否过期，没有过期就直接进行下一步，过期了先去重新登录再进行下一步操作。 登录系统设计方面，无论是小程序还是app分为两种： 一种是首页中是否有和用户相关的信息获取展示模块（比如获取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序开发经验之登录">
+<meta property="og:url" content="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/index.html">
+<meta property="og:site_name" content="Justsso的博客">
+<meta property="og:description" content="小程序一般是在app onLaunch程序初始化时，检测用户是否登录过，（查看localStorage中是否有登录标志），然后wx.checkSession() 接口来判断session_key是否过期作为用户登录状态是否过期，没有过期就直接进行下一步，过期了先去重新登录再进行下一步操作。 登录系统设计方面，无论是小程序还是app分为两种： 一种是首页中是否有和用户相关的信息获取展示模块（比如获取">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-10T08:03:11.334Z">
+<meta property="article:author" content="justsso">
+<meta property="article:tag" content="前端,javascript,react,redux,css,工程化">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/justsso" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">justsso</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">前端程序媛</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/css/">css</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/es6/">es6</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javasscript/">javasscript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/react/">react</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87/">前端必备</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">koa2中间件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="tag">事件循环</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" rel="tag">开发者工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 13px;">koa2中间件</a> <a href="/tags/npm/" style="font-size: 13.5px;">npm</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 13px;">事件循环</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 13px;">安全</a> <a href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">开发者工具</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 13px;">数组</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 13.5px;">模块化</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13px;">爬虫</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/13/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="title">解决react中出现invalid host header问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-12T16:07:47.891Z" itemprop="datePublished">2021-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/02/%E8%81%8A%E8%81%8Areact%20fiber%E6%9E%B6%E6%9E%84/" class="title">聊聊react fiber架构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-01T16:00:00.000Z" itemprop="datePublished">2021-05-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/09/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91JavaScript%E6%A8%A1%E5%9D%97%E7%AE%80%E5%8F%B2/" class="title">【转载】JavaScript模块简史</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-08T16:00:00.000Z" itemprop="datePublished">2020-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/13/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E8%AE%B2%E8%A7%A3%E6%95%B0%E7%BB%84%E7%9A%84reduce%E7%94%A8%E6%B3%95/" class="title">由浅入深讲解数组的reduce用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished">2020-07-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%AE%89%E5%85%A8/" class="title">浏览器中的安全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-微信小程序开发经验之登陆" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      微信小程序开发经验之登录
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/" class="article-date">
+	  <time datetime="2019-11-15T16:00:00.000Z" itemprop="datePublished">2019-11-16</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>小程序一般是在app onLaunch程序初始化时，检测用户是否登录过，（查看localStorage中是否有登录标志），然后wx.checkSession() 接口来判断session_key是否过期作为用户登录状态是否过期，没有过期就直接进行下一步，过期了先去重新登录再进行下一步操作。</p>
+<p>登录系统设计方面，无论是小程序还是app分为两种：</p>
+<p>一种是首页中是否有和用户相关的信息获取展示模块（比如获取用户的报名课程，任务，扇贝阅读app，不背单词app），这种需要在程序启动时检测session是否过期，如果过期了，这时应该在进入首页前，就截断用户操作（不然，用户获取不到属于他的正确信息），界面给出一个提示进行重新登陆或者路由跳转到重新登陆界面，登录完成之后再返回到首页。</p>
+<p>另一种是首页中没有和用户相关的信息（比如获取用户的报名课程，大多都是系统的推荐相关，分类展示信息，比如美团app），用户的信息一般放在 其他的tab（我的页面）中， 这种就不需要做一个明显的session_key过期的重新登陆模式，因为之所以要重新登录主要是和用户的信息有关系，首页不需要获取用户信息，就没必要做出一个提示要用户重新登录，一般是在用户无感知的情况下，系统自动进行了重新登录，本地存储最新的登录标志。当用户手动切换到到其他tab的时候，app本地已经进行过重新登陆了，用户可以不受干扰的继续使用app。</p>
+<h3 id="实际举例"><a href="#实际举例" class="headerlink" title="实际举例"></a>实际举例</h3><p><strong>1. 思路</strong></p>
+<p>1）用户登录态过期时间如何设置？</p>
+<p>这里我们在前端进行控制，即利用<code>wx.checkSession()</code> 接口来判断<code>session_key</code> 是否过期来作为用户登录态是否过期的标志。如果过期了，则跳转到统一的登录页面引导用户点击按钮重新授权登录，重新登录之后<code>session_key</code> 会刷新，相当于在获取用户最新信息的同时重新设定了过期时间。</p>
+<p>（2）onShow() 与onLoad()</p>
+<p>小程序js 中有<code>onShow</code> 与<code>onLoad</code>两种事件。两种事件的区别就在于onLoad 每次打开小程序只加载一次，跳转到其他页面再回来的时候这个事件就不会再触发。而onShow 则每次进入页面都会触发，所以我们在进入每个页面检查用户登录态是否过期的代码需要放在<code>onShow</code> 中。</p>
+<p>（3）重新登录过程分析</p>
+<p>如果用户登录态过期，则需要进行重新登录。前端引导用户点击按钮触发<code>getUserInfo</code> 获取最新用户信息 -&gt; 前端调用<code>wx.login()</code> 获取<code>code</code> -&gt; 前端将<code>code</code> 发送给后端获取<code>openid</code> 和<code>seesion_key</code> -&gt; 后端写<code>session</code> 并返回对应<code>session </code>的唯一标志 -&gt; 前端存储这个唯一标志。</p>
+<p><strong>2. 代码实例</strong></p>
+<p>在每个页面的onShow 事件中添加以下代码来检查当前用户登录态是否过期:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">`wx.checkSession(&#123;`</span><span class="string">` `</span><span class="string">`success: `</span><span class="string">`function`</span> <span class="string">`() &#123;`</span><span class="string">` `</span><span class="string">`//session_key 未过期，并且在本生命周期一直有效`</span><span class="string">` `</span><span class="string">`return`</span> <span class="string">`;`</span><span class="string">` `</span><span class="string">`&#125;,`</span><span class="string">` `</span><span class="string">`fail: `</span><span class="string">`function`</span> <span class="string">`() &#123;`</span><span class="string">` `</span><span class="string">`// session_key 已经失效，需要重新执行登录流程`</span><span class="string">` `</span><span class="string">`wx.navigateTo(&#123;`</span><span class="string">` `</span><span class="string">`url: `</span><span class="string">`&quot;/pages/authorize/index&quot;`</span><span class="string">` `</span><span class="string">`&#125;)`</span><span class="string">` `</span><span class="string">`&#125;`</span><span class="string">`&#125;)`</span></span><br></pre></td></tr></table></figure>
+
+<p>因为进入每个页面中都需要进行用户登录态是否过期的检查，所以需要有一个公共的授权页面，当检查不同过的时候，就跳转到这个授权页面引导用户重新进行授权，授权页面authorize 代码如下：</p>
+<p><strong>wxml</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">view</span> <span class="attr">class</span>=<span class="string">&quot;container&quot;</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">view</span> <span class="attr">style</span>=<span class="string">&#x27;width:100%;padding-left:30rpx;font-size: 28rpx;margin-top:30rpx;&#x27;</span>&gt;</span>1、同意当前小程序获取我的微信头像；<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">view</span> <span class="attr">style</span>=<span class="string">&#x27;width:100%;padding-left:30rpx;font-size: 28rpx;margin-top:30rpx;&#x27;</span>&gt;</span>2、同意当前小程序获取我的微信昵称等其他信息；<span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">button</span> <span class="attr">open-type</span>=<span class="string">&quot;getUserInfo&quot;</span> <span class="attr">bindgetuserinfo</span>=<span class="string">&quot;bindGetUserInfo&quot;</span> <span class="attr">class</span>=<span class="string">&quot;save-btn&quot;</span>&gt;</span>授权登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">view</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>wxss</strong></p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">page&#123;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">100%</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.container</span>&#123;</span><br><span class="line"> <span class="attribute">background-color</span>: <span class="number">#f5f5f9</span>;</span><br><span class="line"> <span class="attribute">justify-content</span>: initial;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-class">.save-btn</span>&#123;</span><br><span class="line"> <span class="attribute">width</span>: <span class="number">690</span>rpx;</span><br><span class="line"> <span class="attribute">height</span>: <span class="number">80</span>rpx;</span><br><span class="line"> <span class="attribute">line-height</span>: <span class="number">80</span>rpx;</span><br><span class="line"> <span class="attribute">text-align</span>: center;</span><br><span class="line"> <span class="attribute">margin-top</span>:<span class="number">30</span>rpx; </span><br><span class="line"> <span class="attribute">border-radius</span>: <span class="number">6</span>rpx;</span><br><span class="line"> <span class="attribute">box-sizing</span>: border-box;</span><br><span class="line"> <span class="attribute">background-color</span>: <span class="number">#e64340</span>;</span><br><span class="line"> <span class="attribute">color</span>:<span class="number">#fff</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// pages/authorize/index.js</span></span><br><span class="line"><span class="keyword">var</span> app = getApp();</span><br><span class="line"><span class="keyword">let</span> Domain = app.globalData.domain;</span><br><span class="line">Page(&#123;</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 页面的初始数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> data: &#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命周期函数--监听页面加载</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onLoad: <span class="function"><span class="keyword">function</span> (<span class="params">options</span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命周期函数--监听页面初次渲染完成</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onReady: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命周期函数--监听页面显示</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onShow: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命周期函数--监听页面隐藏</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onHide: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命周期函数--监听页面卸载</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onUnload: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 页面相关事件处理函数--监听用户下拉动作</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onPullDownRefresh: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 页面上拉触底事件的处理函数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onReachBottom: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line">  </span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 用户点击右上角分享</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> onShareAppMessage: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; &#125;,</span><br><span class="line"> bindGetUserInfo: <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</span><br><span class="line">     <span class="comment">// 获得最新的用户信息</span></span><br><span class="line">     <span class="keyword">if</span> (!e.detail.userInfo)&#123;</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     wx.setStorageSync(<span class="string">&#x27;userInfo&#x27;</span>, e.detail.userInfo)</span><br><span class="line">     <span class="built_in">this</span>.checkSessionAndLogin();</span><br><span class="line"> &#125;,</span><br><span class="line"> <span class="comment">/* </span></span><br><span class="line"><span class="comment"> 这里使用openid 作为与后端session 连接的标志</span></span><br><span class="line"><span class="comment"> 检查是否存在openid，即之前是否登录过</span></span><br><span class="line"><span class="comment">  如果登录过，检查session_key 是否过期</span></span><br><span class="line"><span class="comment">  如果过期了，remove openid 重新执行login 并将用户信息发送到服务器端更新</span></span><br><span class="line"><span class="comment">  如果没过期则返回</span></span><br><span class="line"><span class="comment">  如果没登录过则执行login 并将用户信息发送到服务器更新</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"> checkSessionAndLogin: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">     <span class="keyword">let</span> that = <span class="built_in">this</span>;</span><br><span class="line">     <span class="keyword">let</span> thisOpenId = wx.getStorageSync(<span class="string">&#x27;openid&#x27;</span>);</span><br><span class="line">  </span><br><span class="line"> <span class="comment">// 已经进行了登录，检查登录是否过期</span></span><br><span class="line">     <span class="keyword">if</span> (thisOpenId) &#123;</span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">&#x27;have openid&#x27;</span>)</span><br><span class="line">          wx.checkSession(&#123;</span><br><span class="line">      			success: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">       				<span class="comment">//session_key 未过期，并且在本生命周期一直有效</span></span><br><span class="line">       				wx.navigateBack(&#123;&#125;);</span><br><span class="line">     			 &#125;,</span><br><span class="line">      		fail: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">       			<span class="built_in">console</span>.log(<span class="string">&#x27;but session_key expired&#x27;</span>);</span><br><span class="line">       			<span class="comment">// session_key 已经失效，需要重新执行登录流程</span></span><br><span class="line">      			 wx.removeStorageSync(<span class="string">&#x27;openid&#x27;</span>); <span class="comment">//这里会让openid在本地不存在，通不过if判断，从而走else逻辑，进行登录</span></span><br><span class="line">       			that.checkSessionAndLogin();</span><br><span class="line">     			 &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">     &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="comment">// 没有进行登录则先进行登录操作</span></span><br><span class="line">          <span class="built_in">console</span>.log(<span class="string">&#x27;do not have openid&#x27;</span>);</span><br><span class="line">          that.loginAndGetOpenid();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;,</span><br><span class="line"> <span class="comment">// 执行登录操作并获取用户openId</span></span><br><span class="line"> loginAndGetOpenid: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">     <span class="built_in">console</span>.log(<span class="string">&#x27;do login and get openid&#x27;</span>);</span><br><span class="line">     <span class="keyword">let</span> that = <span class="built_in">this</span>;</span><br><span class="line">     wx.login(&#123;</span><br><span class="line">      	success: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">if</span> (res.code) &#123;</span><br><span class="line">           wx.request(&#123;</span><br><span class="line">               url: Domain + <span class="string">&#x27;/user/wx_login&#x27;</span>,</span><br><span class="line">               data: &#123;</span><br><span class="line">                code: res.code</span><br><span class="line">               &#125;,</span><br><span class="line">               success: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">                res = res.data;</span><br><span class="line">                <span class="built_in">console</span>.log(res)</span><br><span class="line">                <span class="comment">// 保存openId，并将用户信息发送给后端</span></span><br><span class="line">                <span class="keyword">if</span> (res.code === <span class="number">0</span>) &#123;</span><br><span class="line">                wx.showModal(&#123;</span><br><span class="line">                 title: <span class="string">&#x27;set openid&#x27;</span>,</span><br><span class="line">                 content: res.data,</span><br><span class="line">                &#125;)</span><br><span class="line">                wx.setStorageSync(<span class="string">&#x27;openid&#x27;</span>, res.data);</span><br><span class="line">                that.sendUserInfoToServer();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            wx.showModal(&#123;</span><br><span class="line">               title: <span class="string">&#x27;Sorry&#x27;</span>,</span><br><span class="line">               content: <span class="string">&#x27;用户登录失败~&#x27;</span>,</span><br><span class="line">            &#125;)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">       &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">      &#125;</span><br><span class="line">     &#125;)</span><br><span class="line"> &#125;,</span><br><span class="line"> sendUserInfoToServer: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  </span><br><span class="line">     <span class="built_in">console</span>.log(<span class="string">&#x27;now send user info to server&#x27;</span>);</span><br><span class="line">     <span class="keyword">let</span> userInfo = wx.getStorageSync(<span class="string">&#x27;userInfo&#x27;</span>);</span><br><span class="line">     <span class="keyword">let</span> thisOpenId = wx.getStorageSync(<span class="string">&#x27;openid&#x27;</span>);</span><br><span class="line"></span><br><span class="line"> 		 userInfo.openid =thisOpenId;</span><br><span class="line">  </span><br><span class="line">     wx.request(&#123;</span><br><span class="line">        url: Domain + <span class="string">&#x27;/user/updateUser&#x27;</span>,</span><br><span class="line">        method: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">        dataType: <span class="string">&#x27;json&#x27;</span>,</span><br><span class="line">        data: userInfo,</span><br><span class="line">        success: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">        res = res.data;</span><br><span class="line">        <span class="keyword">if</span> (res.code === <span class="number">0</span>) &#123;</span><br><span class="line">         wx.navigateBack(&#123;&#125;);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">         wx.showModal(&#123;</span><br><span class="line">         title: <span class="string">&#x27;Sorry&#x27;</span>,</span><br><span class="line">         content: <span class="string">&#x27;同步信息出错~&#x27;</span>,</span><br><span class="line">         &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">     &#125;)</span><br><span class="line"> &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="另外，unionID的获取也是有必要的"><a href="#另外，unionID的获取也是有必要的" class="headerlink" title="另外，unionID的获取也是有必要的"></a>另外，unionID的获取也是有必要的</h4><h5 id="UnionID-机制说明"><a href="#UnionID-机制说明" class="headerlink" title="UnionID 机制说明"></a>UnionID 机制说明</h5><p>如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序），可通过 UnionID 来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序），用户的 UnionID 是唯一的。换句话说，同一用户，对同一个微信开放平台下的不同应用，unionid是相同的。</p>
+<h5 id="UnionID获取途径"><a href="#UnionID获取途径" class="headerlink" title="UnionID获取途径"></a>UnionID获取途径</h5><p>绑定了开发者帐号的小程序，可以通过以下途径获取 UnionID。</p>
+<ol>
+<li>调用接口 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/open-api/user-info/wx.getUserInfo.html">wx.getUserInfo</a>，从解密数据中获取 UnionID。注意本接口需要用户授权，请开发者妥善处理用户拒绝授权后的情况。</li>
+<li>如果开发者帐号下存在<strong>同主体的</strong>公众号，并且该用户已经关注了该公众号。开发者可以直接通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html">wx.login</a> + <code>code2Session</code> 获取到该用户 UnionID，无须用户再次授权。</li>
+<li>如果开发者帐号下存在<strong>同主体的</strong>公众号或移动应用，并且该用户已经授权登录过该公众号或移动应用。开发者也可以直接通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/api/open-api/login/wx.login.html">wx.login</a> + <code>code2Session</code> 获取到该用户 UnionID ，无须用户再次授权。</li>
+<li>用户在小程序（暂不支持小游戏）中支付完成后，开发者可以直接通过<code>getPaidUnionId</code>接口获取该用户的 UnionID，无需用户授权。注意：本接口仅在用户支付完成后的5分钟内有效，请开发者妥善处理。</li>
+<li>小程序端调用<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/capabilities.html#%E4%BA%91%E5%87%BD%E6%95%B0">云函数</a>时，如果开发者帐号下存在<strong>同主体的</strong>公众号，并且该用户已经关注了该公众号，可在云函数中通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-server-api/utils/getWXContext.html">cloud.getWXContext</a> 获取 UnionID。</li>
+<li>小程序端调用<a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/basis/capabilities.html#%E4%BA%91%E5%87%BD%E6%95%B0">云函数</a>时，如果开发者帐号下存在<strong>同主体的</strong>公众号或移动应用，并且该用户已经授权登录过该公众号或移动应用，也可在云函数中通过 <a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/miniprogram/dev/wxcloud/reference-server-api/utils/getWXContext.html">cloud.getWXContext</a> 获取 UnionID。</li>
+</ol>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a style="display: inline-block;
+      word-break: break-word;" href="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/" title="微信小程序开发经验之登录" target="_blank" rel="external">https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/justsso" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/justsso" target="_blank"><span class="text-dark">justsso</span><small class="ml-1x">前端程序媛</small></a></h3>
+        <div>记录学习与工作的地方</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2019/11/17/%E4%BA%8B%E4%BB%B6event/" title="react中的事件"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" title="微信公众平台经验分享"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

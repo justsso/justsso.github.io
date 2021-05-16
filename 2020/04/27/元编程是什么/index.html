@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>元编程是什么 | justsso</title>
+  <meta name="description" content="元编程的目标是利用语言自身的内省能力使代码的其余部分更具描述性、表达性和灵活性。 ES6在JavaScript现有的基础上为元编程新增了一些形式&#x2F;特性。如下： 函数名称程序中有多种方式可以表达一个函数，函数的”名称”应该是说什么并非总是清晰无疑的。 有词法名称的函数在ES6中， 默认情况下函数的词法名称（如果有的话）也会被设为它的name属性。如果函数设定了name值，那么这个值通常也就是开发者中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="元编程是什么">
+<meta property="og:url" content="https://justsso.github.io/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/index.html">
+<meta property="og:site_name" content="Justsso的博客">
+<meta property="og:description" content="元编程的目标是利用语言自身的内省能力使代码的其余部分更具描述性、表达性和灵活性。 ES6在JavaScript现有的基础上为元编程新增了一些形式&#x2F;特性。如下： 函数名称程序中有多种方式可以表达一个函数，函数的”名称”应该是说什么并非总是清晰无疑的。 有词法名称的函数在ES6中， 默认情况下函数的词法名称（如果有的话）也会被设为它的name属性。如果函数设定了name值，那么这个值通常也就是开发者中">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-04-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-02T07:32:10.295Z">
+<meta property="article:author" content="justsso">
+<meta property="article:tag" content="proxy">
+<meta name="twitter:card" content="summary">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://justsso.github.io/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/justsso" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">justsso</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">前端程序媛</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/css/">css</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/es6/">es6</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javasscript/">javasscript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/react/">react</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87/">前端必备</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">koa2中间件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="tag">事件循环</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" rel="tag">开发者工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 13px;">koa2中间件</a> <a href="/tags/npm/" style="font-size: 13.5px;">npm</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 13px;">事件循环</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 13px;">安全</a> <a href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">开发者工具</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 13px;">数组</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 13.5px;">模块化</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13px;">爬虫</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/13/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="title">解决react中出现invalid host header问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-12T16:07:47.891Z" itemprop="datePublished">2021-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/02/%E8%81%8A%E8%81%8Areact%20fiber%E6%9E%B6%E6%9E%84/" class="title">聊聊react fiber架构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-01T16:00:00.000Z" itemprop="datePublished">2021-05-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/09/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91JavaScript%E6%A8%A1%E5%9D%97%E7%AE%80%E5%8F%B2/" class="title">【转载】JavaScript模块简史</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-08T16:00:00.000Z" itemprop="datePublished">2020-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/13/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E8%AE%B2%E8%A7%A3%E6%95%B0%E7%BB%84%E7%9A%84reduce%E7%94%A8%E6%B3%95/" class="title">由浅入深讲解数组的reduce用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished">2020-07-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%AE%89%E5%85%A8/" class="title">浏览器中的安全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-元编程是什么" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      元编程是什么
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/" class="article-date">
+	  <time datetime="2020-04-26T16:00:00.000Z" itemprop="datePublished">2020-04-27</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  </span>
+
+        
+  <span class="article-tag">
+    <i class="icon icon-tags"></i>
+	<a class="article-tag-link-link" href="/tags/proxy/" rel="tag">proxy</a>
+  </span>
+
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <p>元编程的目标是利用语言自身的内省能力使代码的其余部分更具描述性、表达性和灵活性。</p>
+<p>ES6在JavaScript现有的基础上为元编程新增了一些形式/特性。如下：</p>
+<p>函数名称<br>程序中有多种方式可以表达一个函数，函数的”名称”应该是说什么并非总是清晰无疑的。</p>
+<p>有词法名称的函数<br>在ES6中， 默认情况下函数的词法名称（如果有的话）也会被设为它的name属性。如果函数设定了name值，那么这个值通常也就是开发者中栈踪迹使用的名称。<br>没有词法名称的函数<br>推导。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;); <span class="comment">// name: </span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>*(<span class="params"></span>)</span>&#123; .. &#125;); <span class="comment">// name: </span></span><br><span class="line"><span class="built_in">window</span>.foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;; <span class="comment">// name: </span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Awesome</span> </span>&#123; </span><br><span class="line"> <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span> &#123; .. &#125; <span class="comment">// name: Awesome </span></span><br><span class="line"> <span class="function"><span class="title">funny</span>(<span class="params"></span>)</span> &#123; .. &#125; <span class="comment">// name: funny </span></span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">var</span> c = <span class="class"><span class="keyword">class</span> <span class="title">Awesome</span> </span>&#123; .. &#125;; <span class="comment">// name: Awesome </span></span><br><span class="line"><span class="keyword">var</span> o = &#123; </span><br><span class="line"> <span class="function"><span class="title">foo</span>(<span class="params"></span>)</span> &#123; .. &#125;, <span class="comment">// name: foo </span></span><br><span class="line"> *<span class="function"><span class="title">bar</span>(<span class="params"></span>)</span> &#123; .. &#125;, <span class="comment">// name: bar </span></span><br><span class="line"> baz: <span class="function">() =&gt;</span> &#123; .. &#125;, <span class="comment">// name: baz </span></span><br><span class="line"> bam: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;, <span class="comment">// name: bam </span></span><br><span class="line"><span class="keyword">get</span> <span class="title">qux</span>() &#123; .. &#125;, <span class="comment">// name: get qux </span></span><br><span class="line"><span class="keyword">set</span> <span class="title">fuz</span>() &#123; .. &#125;, <span class="comment">// name: set fuz </span></span><br><span class="line"> [<span class="string">&quot;b&quot;</span> + <span class="string">&quot;iz&quot;</span>]: </span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;, <span class="comment">// name: biz </span></span><br><span class="line"> [<span class="built_in">Symbol</span>( <span class="string">&quot;buz&quot;</span> )]: </span><br><span class="line"><span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125; <span class="comment">// name: [buz] </span></span><br><span class="line">&#125;; </span><br><span class="line"><span class="keyword">var</span> x = o.foo.bind( o ); <span class="comment">// name: bound foo </span></span><br><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; .. &#125;).bind( o ); <span class="comment">// name: bound</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; .. &#125; <span class="comment">// name: default </span></span><br><span class="line"><span class="keyword">var</span> y = <span class="keyword">new</span> <span class="built_in">Function</span>(); <span class="comment">// name: anonymous </span></span><br><span class="line"><span class="keyword">var</span> GeneratorFunction = </span><br><span class="line"><span class="function"><span class="keyword">function</span>*(<span class="params"></span>)</span>&#123;&#125;.__proto__.constructor; </span><br><span class="line"><span class="keyword">var</span> z = <span class="keyword">new</span> GeneratorFunction(); <span class="comment">// name: anonymous</span></span><br></pre></td></tr></table></figure>
+
+<p>默认情况下，<code>name</code> 属性不可写，但可配置，也就是说如果需要的话，可使用 Object.defineProperty(..) 来手动修改。</p>
+<h3 id="元属性"><a href="#元属性" class="headerlink" title="元属性"></a>元属性</h3><p><code>new.target</code> 元属性，关键字new用于属性访问的上下文。</p>
+<h3 id="公开符号"><a href="#公开符号" class="headerlink" title="公开符号"></a>公开符号</h3><h4 id="Symbol-iterator"><a href="#Symbol-iterator" class="headerlink" title="Symbol.iterator"></a>Symbol.iterator</h4><p>调用<code>…</code>展开和<code>for…of</code>循环时，会自动使用Symbol.iterator。</p>
+<p><code>Symbol.iterator</code>表示任意对象身上的一个专门位置（属性），语言机制自动在这个位置上寻找一个方法，这个方法<br>构造一个迭代器来消耗这个对象的值。很多对象定义有这个符号的默认值。</p>
+<p>然而，也可以通过定义 Symbol.iterator 属性为任意对象值定义自己的迭代器逻辑，即使<br>这会覆盖默认的迭代器。</p>
+<h4 id="Symbol-toStringTag与Symbol-hashInstance"><a href="#Symbol-toStringTag与Symbol-hashInstance" class="headerlink" title="Symbol.toStringTag与Symbol.hashInstance"></a>Symbol.toStringTag与Symbol.hashInstance</h4><p>最常见的一个元编程任务，就是在一个值上进行内省来找出它是什么种类，这通常是为了确定其上适合执行何种运算。对于对象来说，最常用的内省技术是 toString() 和instanceof。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>) </span>&#123;&#125; </span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Foo(); </span><br><span class="line">a.toString(); <span class="comment">// [object Object] </span></span><br><span class="line">a <span class="keyword">instanceof</span> Foo; <span class="comment">// true</span></span><br><span class="line">在 ES6 中，可以控制这些操作的行为特性：</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params">greeting</span>) </span>&#123; </span><br><span class="line"><span class="built_in">this</span>.greeting = greeting; </span><br><span class="line">&#125; </span><br><span class="line">Foo.prototype[<span class="built_in">Symbol</span>.toStringTag] = <span class="string">&quot;Foo&quot;</span>; </span><br><span class="line"><span class="built_in">Object</span>.defineProperty( Foo, <span class="built_in">Symbol</span>.hasInstance, &#123; </span><br><span class="line"> value: <span class="function"><span class="keyword">function</span>(<span class="params">inst</span>) </span>&#123; </span><br><span class="line"><span class="keyword">return</span> inst.greeting == <span class="string">&quot;hello&quot;</span>; </span><br><span class="line"> &#125; </span><br><span class="line">&#125; ); </span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Foo( <span class="string">&quot;hello&quot;</span> ), </span><br><span class="line"> b = <span class="keyword">new</span> Foo( <span class="string">&quot;world&quot;</span> ); </span><br><span class="line">b[<span class="built_in">Symbol</span>.toStringTag] = <span class="string">&quot;cool&quot;</span>; </span><br><span class="line">a.toString(); <span class="comment">// [object Foo] </span></span><br><span class="line"><span class="built_in">String</span>( b ); <span class="comment">// [object cool] </span></span><br><span class="line">a <span class="keyword">instanceof</span> Foo; <span class="comment">// true </span></span><br><span class="line">b <span class="keyword">instanceof</span> Foo; <span class="comment">// false</span></span><br></pre></td></tr></table></figure>
+
+<p>原型（或实例本身）的Symbol.toStringTag符号指定了再[object ___]字符串化使用的字符串值。</p>
+<p>原型（或实例本身）的Symbol.toStringTag符号指定了再[object ___]字符串化使用的字符串值。</p>
+<h4 id="Symbol-species"><a href="#Symbol-species" class="headerlink" title="Symbol.species"></a>Symbol.species</h4><p>通过Symbol.species改写类的默认的构造器。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cool</span> </span>&#123; </span><br><span class="line"> <span class="comment">// 把@@species推迟到子类</span></span><br><span class="line"><span class="keyword">static</span> get [<span class="built_in">Symbol</span>.species]() &#123; <span class="keyword">return</span> <span class="built_in">this</span>; &#125; </span><br><span class="line"> <span class="function"><span class="title">again</span>(<span class="params"></span>)</span> &#123; </span><br><span class="line"><span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">this</span>.constructor[<span class="built_in">Symbol</span>.species](); </span><br><span class="line"> &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Fun</span> <span class="keyword">extends</span> <span class="title">Cool</span> </span>&#123;&#125; </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Awesome</span> <span class="keyword">extends</span> <span class="title">Cool</span> </span>&#123; </span><br><span class="line"> <span class="comment">// 强制指定@@species为父构造器</span></span><br><span class="line"><span class="keyword">static</span> get [<span class="built_in">Symbol</span>.species]() &#123; <span class="keyword">return</span> Cool; &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> Fun(), </span><br><span class="line"> b = <span class="keyword">new</span> Awesome(), </span><br><span class="line"> c = a.again(), </span><br><span class="line"> d = b.again(); </span><br><span class="line">c <span class="keyword">instanceof</span> Fun; <span class="comment">// true </span></span><br><span class="line">d <span class="keyword">instanceof</span> Awesome; <span class="comment">// false </span></span><br><span class="line">d <span class="keyword">instanceof</span> Cool; <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
+<p>就像前面代码中 Cool 的定义那样，内置原生构造器上 Symbol.species 的默认行为是return this。在用户类上没有默认值，但是就像展示的那样，这个行为特性很容易模拟。</p>
+<p>如果需要定义生成新实例的方法，使用 new this.constructor<a href="..">Symbol.species</a> 模式元编程，而不要硬编码 new this.constructor(..) 或 new XYZ(..)。然后继承类就能够自定义 Symbol.species 来控制由哪个构造器产生这些实例。</p>
+<h4 id="Symbol-toPrimitive"><a href="#Symbol-toPrimitive" class="headerlink" title="Symbol.toPrimitive"></a>Symbol.toPrimitive</h4><p>抽象类型转换运算tpPrimitive，它用在对象为了某个操作（比如比较==或者相加+）必须被强制转换为一个原生类型值的时候。在ES6之前，没有办法控制这以行为。<br>而在ES6中，在任意对象值上作为属性的符号@@toPrimitivessysmbol都可以通过指定一个方法来定制这个ToPrimitive强制换转。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]; </span><br><span class="line">arr + <span class="number">10</span>; <span class="comment">// 1,2,3,4,510 </span></span><br><span class="line">arr[<span class="built_in">Symbol</span>.toPrimitive] = <span class="function"><span class="keyword">function</span>(<span class="params">hint</span>) </span>&#123; </span><br><span class="line"> <span class="keyword">if</span> (hint == <span class="string">&quot;default&quot;</span> || hint == <span class="string">&quot;number&quot;</span>) &#123; </span><br><span class="line"> <span class="comment">// 求所有数字之和</span></span><br><span class="line"><span class="keyword">return</span> <span class="built_in">this</span>.reduce( <span class="function"><span class="keyword">function</span>(<span class="params">acc,curr</span>)</span>&#123; </span><br><span class="line"><span class="keyword">return</span> acc + curr; </span><br><span class="line"> &#125;, <span class="number">0</span> ); </span><br><span class="line"> &#125; </span><br><span class="line">&#125;; </span><br><span class="line">arr + <span class="number">10</span>; <span class="comment">// 25</span></span><br></pre></td></tr></table></figure>
+
+<p>Symbol.toPrimitive方法根据调用ToPrimitive的运算期望的类型，会提供一个提示（hint）指定“string”、“number”或“default”（这应该被解释为”number”）。在前面的代码中，加法 + 运算没有提示（传入 “default”）。而乘法 * 运算提示为 “number”，String(arr)提示为 “string”。</p>
+<p>如果一个对象与另一个非对象值比较，== 运算符调用这个对象上的ToPrimitive 方法时不指定提示——如果有 @@toPrimitive 方法的话，调用时提示为 “default”。但是，如果比较的两个值都是对象，== 的行为和 === 一样，也就是直接比较其引用。这种情况下完全不会调用 @@toPrimitive。</p>
+<h4 id="正则表达式符号"><a href="#正则表达式符号" class="headerlink" title="正则表达式符号"></a>正则表达式符号</h4><p>对于正则表达式对象，有4个公开符号可以被覆盖，他们控制着这些正则表达式在4个对应的同名String.prototypt函数中如何被使用。</p>
+<ul>
+<li>@@match ： 正则表达式的Symbol.match值是一个用于利用给定的正则表达式匹配一个字符串值的部分或全部内容的方法。</li>
+<li>@@replace:正则表达式的Symbol.replace值是一个方法，String.prototypt.replace(..)用它来替换一个字符串内匹配模式的一个或多个字符串序列。</li>
+<li>@@search：正则表达式的Symbol.search值试试一个方法，String.prototype.search(..)用它来在另一个字符串中搜索一个匹配给定正则表达式的子串。</li>
+<li>@@split：正则表达式的Symbol.split值时一个方法，String.prototype.split(..)用它把字符串在匹配给定正则表达式的分隔符处分隔为子串。</li>
+</ul>
+<p>如果你不够艺高人胆大的话，就不要覆盖内置正则表达式算法了！ JavaScript 的正则表达式引擎经过高度优化，所以你自己的用户代码很可能会慢上许多。这类元编程简洁强大，但是只应该在确实需要或能带来收益的时候才使用。</p>
+<h4 id="Symbol-isConcatSpreadable"><a href="#Symbol-isConcatSpreadable" class="headerlink" title="Symbol.isConcatSpreadable"></a>Symbol.isConcatSpreadable</h4><p>符号 @@isConcatSpreadable 可以被定义为任意对象（比如数组或其他可迭代对象）的布尔型属性（SymbolisConcatSpreadable），用来指示如果把它传给一个数组的 concat(..) 是否应该将其展开。<br>考虑：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>], </span><br><span class="line"> b = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]; </span><br><span class="line">b[<span class="built_in">Symbol</span>.isConcatSpreadable] = <span class="literal">false</span>; </span><br><span class="line">[].concat( a, b ); <span class="comment">// [1,2,3,[4,5,6]]</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Symbol-unscopables"><a href="#Symbol-unscopables" class="headerlink" title="Symbol.unscopables"></a>Symbol.unscopables</h4><p>符号 @@unscopables 可以被定义为任意对象的对象属性（Symbol.unscopables），用来指示使用 with 语句时哪些属性可以或不可以暴露为词法变量。<br>考虑：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> o = &#123; <span class="attr">a</span>:<span class="number">1</span>, <span class="attr">b</span>:<span class="number">2</span>, <span class="attr">c</span>:<span class="number">3</span> &#125;, </span><br><span class="line"> a = <span class="number">10</span>, b = <span class="number">20</span>, c = <span class="number">30</span>; </span><br><span class="line">o[<span class="built_in">Symbol</span>.unscopables] = &#123; </span><br><span class="line"> a: <span class="literal">false</span>, </span><br><span class="line"> b: <span class="literal">true</span>, </span><br><span class="line"> c: <span class="literal">false</span></span><br><span class="line">&#125;; </span><br><span class="line"><span class="keyword">with</span> (o) &#123; </span><br><span class="line"> <span class="built_in">console</span>.log( a, b, c ); <span class="comment">// 1 20 3 </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>@@unscopables 对象中的 true 表示这个属性应该是 unscopable 的，因此会从词法作用域变量中被过滤出去。false 表示可以将其包含到词法作用域变量中。strict 模式下不允许 with 语句，因此应当被认为是语言的过时特性。不要使用它。因为应该避免使用 with，所以符号 @@unscopables 也没有太大意义。</p>
+<h3 id="代理-Proxy"><a href="#代理-Proxy" class="headerlink" title="代理 Proxy"></a>代理 Proxy</h3><p>ES6中新增的最明显的元编程特性之一是Proxy。<br>代理是一种由你创建的特殊的对象，它“封装”另一个普通对象——或者说挡在这个普通对象的前面。你可以在代理对象上注册特殊的处理函数（也就是 trap），代理上执行各种操作的时候会调用这个程序。这些处理函数除了把操作转发给原始目标 / 被封装对象之外，还有机会执行额外的逻辑。</p>
+<p>每个代理处理函数在对应的元编程任务执行的时候进行拦截，而每个 Reflect 工具在一个对象上执行相应的元编程任务。每个代理处理函数都有一个自动调用相应的 Reflect 工具的默认定义。几乎可以确定 Proxy 和 Reflect 总是这么协同工<br>作的。</p>
+<p>get(..)<br>通过 [[Get]]，在代理上访问一个属性（Reflect.get(..)、. 属性运算符或 [ .. ] 属性运算符）</p>
+<p>set(..)<br>通过 [[Set]]，在代理上设置一个属性值（Reflect.set(..)、赋值运算符 = 或目标为对象属性的解构赋值）</p>
+<p>deleteProperty(..)<br>通 过 [[Delete]]， 从 代 理 对 象 上 删 除 一 个 属 性（Reflect.deleteProperty(..) 或（delete）</p>
+<p>apply(..)（如果目标为函数）<br>通 过 [[Call]]，将代理作为普通函数 / 方 法 调 用（Reflect.apply(..)、call(..)、apply(..) 或 (..) 调用运算符）</p>
+<p>construct(..)（如果目标为构造函数）<br>通过 [[Construct]]，将代理作为构造函数调用（Reflect.construct(..) 或 new）</p>
+<p>getOwnPropertyDescriptor(..)<br>通过 [[GetOwnProperty]]，从代理中提取一个属性描述符（Object.getOwnPropertyDescriptor(..)或 Reflect.getOwnPropertyDescriptor(..)）</p>
+<p>defineProperty(..)<br>通过 [[DefineOwnProperty]]，在代理上设置一个属性描述符（Object.defineProperty(..)或 Reflect.defineProperty(..)）</p>
+<p>getPrototypeOf(..)<br>通 过 [[GetPrototypeOf]]，得到代理的 [[Prototype]]（Object.getPrototypeOf(..)、Reflect.getPrototypeOf(..)、proto、Object#isPrototypeOf(..) 或 instanceof）</p>
+<p>setPrototypeOf(..)<br>通 过 [[SetPrototypeOf]]，设置代理的 [[Prototype]]（Object.setPrototypeOf(..)、<br>Reflect.setPrototypeOf(..) 或 proto）</p>
+<p>preventExtensions(..)<br>通过 [[PreventExtensions]]，使得代理变成不可扩展的（Object.prevent Extensions(..)或 Reflect.preventExtensions(..)）</p>
+<p>isExtensible(..)<br>通过 [[IsExtensible]]，检测代理是否可扩展（Object.isExtensible(..) 或 Reflect.isExtensible(..)）</p>
+<p>ownKeys(..)<br>通过 [[OwnPropertyKeys]]，提取代理自己的属性和 / 或符号属性（Object.keys(..)、Object.getOwnPropertyNames(..)、Object.getOwnSymbolProperties(..)、Reflect.ownKeys(..) 或 JSON.stringify(..)）enumerate(..)通过 [[Enumerate]]，取得代理拥有的和“继承来的”可枚举属性的迭代器（Reflect.enumerate(..) 或 for..in）</p>
+<p>has(..)<br>通过 [[HasProperty]]，检查代理是否拥有或者“继承了”某个属性（Reflect.has(..)、Object#hasOwnProperty(..) 或 “prop” in obj）</p>
+<p>但是还是有些操作是无法代理的，typeof String() +</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">a</span>:<span class="number">1</span>, <span class="attr">b</span>:<span class="number">2</span> &#125;, </span><br><span class="line"> handlers = &#123; .. &#125;, </span><br><span class="line"> pobj = <span class="keyword">new</span> <span class="built_in">Proxy</span>( obj, handlers ); </span><br><span class="line"><span class="keyword">typeof</span> obj; </span><br><span class="line"><span class="built_in">String</span>( obj ); </span><br><span class="line"></span><br><span class="line">obj + <span class="string">&quot;&quot;</span>; </span><br><span class="line">obj == pobj; </span><br><span class="line">obj === pobj</span><br></pre></td></tr></table></figure>
+
+<p>可取消代理<br>可取消代理用 Proxy.revocable(..) 创建，这是一个普通函数，而不像 Proxy(..) 一样是构<br>造器。除此之外，它接收同样的两个参数：target 和 handlers。和 new Proxy(..) 不一样，Proxy.revocable(..) 的返回值不是代理本身。而是一个有两个<br>属性——proxy 和 revode 的对象</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">a</span>: <span class="number">1</span> &#125;, </span><br><span class="line"> handlers = &#123; </span><br><span class="line"> <span class="function"><span class="title">get</span>(<span class="params">target,key,context</span>)</span> &#123; </span><br><span class="line"> <span class="comment">// 注意：target === obj, </span></span><br><span class="line"> <span class="comment">// context === pobj </span></span><br><span class="line"> <span class="built_in">console</span>.log( <span class="string">&quot;accessing: &quot;</span>, key ); </span><br><span class="line"><span class="keyword">return</span> target[key]; </span><br><span class="line"> &#125; </span><br><span class="line"> &#125;, </span><br><span class="line"> &#123; <span class="attr">proxy</span>: pobj, <span class="attr">revoke</span>: prevoke &#125; = </span><br><span class="line"> <span class="built_in">Proxy</span>.revocable( obj, handlers ); </span><br><span class="line">pobj.a; </span><br><span class="line"><span class="comment">// accessing: a </span></span><br><span class="line"><span class="comment">// 1 </span></span><br><span class="line"><span class="comment">// 然后：</span></span><br><span class="line">prevoke(); </span><br><span class="line">pobj.a; </span><br><span class="line"><span class="comment">// TypeError</span></span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a style="display: inline-block;
+      word-break: break-word;" href="https://justsso.github.io/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/" title="元编程是什么" target="_blank" rel="external">https://justsso.github.io/2020/04/27/%E5%85%83%E7%BC%96%E7%A8%8B%E6%98%AF%E4%BB%80%E4%B9%88/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/justsso" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/justsso" target="_blank"><span class="text-dark">justsso</span><small class="ml-1x">前端程序媛</small></a></h3>
+        <div>记录学习与工作的地方</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2020/04/28/%E5%9C%A8JavaScript%E4%B8%AD%E4%BD%BF%E7%94%A8ES6%20Proxy%E5%81%9A%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8/" title="在JavaScript中使用ES6 Proxy做类型安全"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2020/04/26/Proxy%E3%80%81Reflect%E7%9C%9F%E7%9A%84%E5%BE%88%E6%9C%89%E7%94%A8/" title="Proxy Reflect真的很有用"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

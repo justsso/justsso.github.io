@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>一次痛苦又甜蜜的微信支付踩坑之旅 | justsso</title>
+  <meta name="description" content="一次痛苦又甜蜜的微信支付踩坑之旅 凡是和钱打交道的事，没有一样是容易的。这是我第一次接触微信支付，发现网上还是有很多同学在求助，XXX了怎么办？XXX是什么情况？为了帮助更多的小伙伴脱离“苦海”，我决定写下这次的踩坑之旅，给更多的人帮助。  介绍微信支付方式分为刷卡支付、公众号支付、扫码支付、APP支付、H5支付、小程序支付。 先从应用场景来各自说一说，这样，能够最快的判断出应该选择哪一种支付。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次痛苦又甜蜜的微信支付踩坑之旅">
+<meta property="og:url" content="https://justsso.github.io/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/index.html">
+<meta property="og:site_name" content="Justsso的博客">
+<meta property="og:description" content="一次痛苦又甜蜜的微信支付踩坑之旅 凡是和钱打交道的事，没有一样是容易的。这是我第一次接触微信支付，发现网上还是有很多同学在求助，XXX了怎么办？XXX是什么情况？为了帮助更多的小伙伴脱离“苦海”，我决定写下这次的踩坑之旅，给更多的人帮助。  介绍微信支付方式分为刷卡支付、公众号支付、扫码支付、APP支付、H5支付、小程序支付。 先从应用场景来各自说一说，这样，能够最快的判断出应该选择哪一种支付。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/xml%E6%A0%BC%E5%BC%8F%E9%94%99%E8%AF%AF.png">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/xml%E9%94%99%E8%AF%AF%E6%83%85%E5%86%B5.png">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E7%AD%BE%E5%90%8D%E9%94%99%E8%AF%AF.png">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E8%AE%BE%E7%BD%AEapi%E5%AF%86%E9%92%A5.png">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E6%AD%A3%E7%A1%AE.png">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95.jpg">
+<meta property="og:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E5%AE%8C%E6%88%90%E6%94%AF%E4%BB%98.png">
+<meta property="article:published_time" content="2018-02-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-12T16:12:46.714Z">
+<meta property="article:author" content="justsso">
+<meta property="article:tag" content="前端,javascript,react,redux,css,工程化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://justsso.github.io/2018/02/03/imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/xml%E6%A0%BC%E5%BC%8F%E9%94%99%E8%AF%AF.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="https://justsso.github.io/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/justsso" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">justsso</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">前端程序媛</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Beijing, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-repository">
+          <a href="/repository">
+            
+            <i class="icon icon-project"></i>
+            
+            <span class="menu-title">项目</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-books">
+          <a href="/books">
+            
+            <i class="icon icon-book-fill"></i>
+            
+            <span class="menu-title">书单</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-links">
+          <a href="/links">
+            
+            <i class="icon icon-friendship"></i>
+            
+            <span class="menu-title">友链</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            
+            <i class="icon icon-cup-fill"></i>
+            
+            <span class="menu-title">关于</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/css/">css</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/es6/">es6</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javascript/">javascript</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/javasscript/">javasscript</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/react/">react</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%BF%85%E5%A4%87/">前端必备</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a><span class="category-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-body">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">koa2中间件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/npm/" rel="tag">npm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/proxy/" rel="tag">proxy</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" rel="tag">事件循环</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" rel="tag">开发者工具</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag">异常</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%BB%84/" rel="tag">数组</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" rel="tag">模块化</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/koa2%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 13px;">koa2中间件</a> <a href="/tags/npm/" style="font-size: 13.5px;">npm</a> <a href="/tags/proxy/" style="font-size: 14px;">proxy</a> <a href="/tags/%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF/" style="font-size: 13px;">事件循环</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 13px;">安全</a> <a href="/tags/%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/" style="font-size: 13px;">开发者工具</a> <a href="/tags/%E5%BC%82%E5%B8%B8/" style="font-size: 13px;">异常</a> <a href="/tags/%E6%95%B0%E7%BB%84/" style="font-size: 13px;">数组</a> <a href="/tags/%E6%A8%A1%E5%9D%97%E5%8C%96/" style="font-size: 13.5px;">模块化</a> <a href="/tags/%E7%88%AC%E8%99%AB/" style="font-size: 13px;">爬虫</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/05/">五月 2021</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">八月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">六月 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">五月 2020</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">四月 2020</a><span class="archive-list-count">11</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">三月 2020</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">二月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/13/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="title">解决react中出现invalid host header问题</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-12T16:07:47.891Z" itemprop="datePublished">2021-05-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2021/05/02/%E8%81%8A%E8%81%8Areact%20fiber%E6%9E%B6%E6%9E%84/" class="title">聊聊react fiber架构</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2021-05-01T16:00:00.000Z" itemprop="datePublished">2021-05-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E5%89%8D%E7%AB%AF%E5%B7%A5%E7%A8%8B%E5%8C%96/">前端工程化</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/09/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91JavaScript%E6%A8%A1%E5%9D%97%E7%AE%80%E5%8F%B2/" class="title">【转载】JavaScript模块简史</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-08T16:00:00.000Z" itemprop="datePublished">2020-08-09</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/07/13/%E7%94%B1%E6%B5%85%E5%85%A5%E6%B7%B1%E8%AE%B2%E8%A7%A3%E6%95%B0%E7%BB%84%E7%9A%84reduce%E7%94%A8%E6%B3%95/" class="title">由浅入深讲解数组的reduce用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished">2020-07-13</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/%E6%B5%8F%E8%A7%88%E5%99%A8/">浏览器</a>
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/%E6%B5%8F%E8%A7%88%E5%99%A8-%E5%AE%89%E5%85%A8/" class="title">浏览器中的安全</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-16T16:00:00.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-微信开发-H5微信支付" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      一次痛苦又甜蜜的微信支付踩坑之旅
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/" class="article-date">
+	  <time datetime="2018-02-02T16:00:00.000Z" itemprop="datePublished">2018-02-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="一次痛苦又甜蜜的微信支付踩坑之旅"><a href="#一次痛苦又甜蜜的微信支付踩坑之旅" class="headerlink" title="一次痛苦又甜蜜的微信支付踩坑之旅"></a>一次痛苦又甜蜜的微信支付踩坑之旅</h1><blockquote>
+<p>凡是和钱打交道的事，没有一样是容易的。这是我第一次接触微信支付，发现网上还是有很多同学在求助，XXX了怎么办？XXX是什么情况？为了帮助更多的小伙伴脱离“苦海”，我决定写下这次的踩坑之旅，给更多的人帮助。</p>
+</blockquote>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>微信支付方式分为刷卡支付、公众号支付、扫码支付、APP支付、H5支付、小程序支付。</p>
+<p>先从应用场景来各自说一说，这样，能够最快的判断出应该选择哪一种支付。</p>
+<ul>
+<li>刷卡支付：使用扫描设备（扫描枪）多见于超市、便利店使用</li>
+<li>公众号支付：嵌入公众号的H5页面</li>
+<li>扫码支付：用户打开“微信扫一扫”，扫描商户的二维码并支付</li>
+<li>APP支付：外部APP应用，用户触发支付时，转到微信内完成支付</li>
+<li>H5支付：非微信内置浏览器请求微信支付</li>
+<li>小程序支付：用户在微信小程序中使用微信支付</li>
+</ul>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>我们公司申请的是微信服务号，需要微信支付的是嵌入服务号内部的网页，所以根据介绍，应该选择“公众号支付”。</p>
+<h2 id="开发步骤"><a href="#开发步骤" class="headerlink" title="开发步骤"></a>开发步骤</h2><p>首先不要被微信支付的开发吓着，其实它很简单。先仔细看公众号支付的文档，看不懂的多看几遍，还看不懂的，动手操作一下，试一试。</p>
+<p>文档在此：<a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1">微信支付统一下单</a></p>
+<ul>
+<li><h3 id="步骤一：统一下单"><a href="#步骤一：统一下单" class="headerlink" title="步骤一：统一下单"></a>步骤一：统一下单</h3></li>
+</ul>
+<p>跟着文档，咱一点点来，搞明白每一步是为什么，就不会迷迷糊糊搞不清楚了。</p>
+<p>首先说一下，这个接口是后台需要完成的，这个接口的目的就是获取prepay_id,它是预支付交易回话标识。将prepay_id传给前台，前台调用js-sdk，这属于步骤二的范围了，一会讲。</p>
+<p>接口链接  <a target="_blank" rel="noopener" href="https://api.mch.weixin.qq.com/pay/unifiedorder">https://api.mch.weixin.qq.com/pay/unifiedorder</a></p>
+<p>在文档中说明了，必须使用post 方法请求微信给的接口链接，传入的数据也必须是xml格式，返回的也是xml的。醉了？不要醉，微信是这样的，支付宝也是这样的。手动微笑，接受吧。</p>
+<p>接着来。</p>
+<p>简单粗暴贴代码：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// &#x27;/addOrder&#x27;是留给前台的调用接口</span></span><br><span class="line">router.post(<span class="string">&#x27;/addOrder&#x27;</span>,<span class="function">(<span class="params">req,res</span>)=&gt;</span>&#123;</span><br><span class="line"><span class="keyword">const</span> addOrderUrl = <span class="string">&#x27;https://api.mch.weixin.qq.com/pay/unifiedorder&#x27;</span>;</span><br><span class="line"><span class="keyword">var</span> client_ip = <span class="string">&quot;&quot;</span>;</span><br><span class="line">client_ip = req.body.ipaddr;</span><br><span class="line"><span class="keyword">var</span> appid = <span class="string">&quot;1234567890&quot;</span>; <span class="comment">// 服务号|公众号的appid</span></span><br><span class="line"><span class="keyword">var</span> body = <span class="string">&quot;商品简单描述-测试&quot;</span>; <span class="comment">// 商品简单描述</span></span><br><span class="line"><span class="keyword">var</span> mch_id= <span class="string">&quot;1234567890&quot;</span>; <span class="comment">// 商户号，申请微信支付，腾讯给的商户号</span></span><br><span class="line"><span class="comment">// var device_info = &quot;WEB&quot;;</span></span><br><span class="line"><span class="keyword">var</span> nonce_str = getRanId(<span class="number">32</span>); <span class="comment">// 随机字符串</span></span><br><span class="line"><span class="keyword">var</span> out_trade_no = <span class="string">&quot;&quot;</span> +<span class="keyword">new</span> <span class="built_in">Date</span>().getTime() + <span class="built_in">Math</span>.floor( <span class="built_in">Math</span>.random() * <span class="number">10</span> ); <span class="comment">//商户订单号</span></span><br><span class="line"><span class="keyword">var</span> total_fee = req.body.total_fee; <span class="comment">//支付金额，单位：分</span></span><br><span class="line"><span class="keyword">var</span> sign = <span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">var</span> notify_url = <span class="string">&quot;http://123.456.789&quot;</span>; <span class="comment">//异步接收微信支付结果通知的回调地址</span></span><br><span class="line"><span class="keyword">var</span> trade_type = <span class="string">&quot;JSAPI&quot;</span>; <span class="comment">// 交易类型</span></span><br><span class="line"><span class="keyword">var</span> openid = req.session.openId;</span><br><span class="line"><span class="built_in">console</span>.log(openid);</span><br><span class="line"><span class="keyword">var</span> stringA = <span class="string">`appid=<span class="subst">$&#123;appid&#125;</span>&amp;body=<span class="subst">$&#123;body&#125;</span>&amp;mch_id=<span class="subst">$&#123;mch_id&#125;</span>&amp;nonce_str=<span class="subst">$&#123;nonce_str&#125;</span>&amp;notify_url=<span class="subst">$&#123;notify_url&#125;</span>&amp;openid=<span class="subst">$&#123;openid&#125;</span>&amp;out_trade_no=<span class="subst">$&#123;out_trade_no&#125;</span>&amp;spbill_create_ip=<span class="subst">$&#123;client_ip&#125;</span>&amp;total_fee=<span class="subst">$&#123;total_fee&#125;</span>&amp;trade_type=<span class="subst">$&#123;trade_type&#125;</span>`</span>;</span><br><span class="line"><span class="keyword">var</span> stringSighTemp = stringA+<span class="string">&quot;&amp;key=****#####jiaoyuguihuayuan----***&quot;</span>; <span class="comment">//32位的商户key,自定义的，这里为了隐私，我用的特殊符号给你们展示</span></span><br><span class="line">sign = md5(stringSighTemp).toUpperCase();</span><br><span class="line"><span class="keyword">var</span> xml = <span class="string">`&lt;xml&gt;</span></span><br><span class="line"><span class="string">&lt;appid&gt;<span class="subst">$&#123;appid&#125;</span>&lt;/appid&gt;</span></span><br><span class="line"><span class="string">&lt;body&gt;<span class="subst">$&#123;body&#125;</span>&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;mch_id&gt;<span class="subst">$&#123;mch_id&#125;</span>&lt;/mch_id&gt;</span></span><br><span class="line"><span class="string">&lt;nonce_str&gt;<span class="subst">$&#123;nonce_str&#125;</span>&lt;/nonce_str&gt;</span></span><br><span class="line"><span class="string">&lt;notify_url&gt;<span class="subst">$&#123;notify_url&#125;</span>&lt;/notify_url&gt;</span></span><br><span class="line"><span class="string">&lt;openid&gt;<span class="subst">$&#123;openid&#125;</span>&lt;/openid&gt;</span></span><br><span class="line"><span class="string">&lt;out_trade_no&gt;<span class="subst">$&#123;out_trade_no&#125;</span>&lt;/out_trade_no&gt;</span></span><br><span class="line"><span class="string">&lt;spbill_create_ip&gt;<span class="subst">$&#123;client_ip&#125;</span>&lt;/spbill_create_ip&gt;</span></span><br><span class="line"><span class="string">&lt;total_fee&gt;<span class="subst">$&#123;total_fee&#125;</span>&lt;/total_fee&gt;  </span></span><br><span class="line"><span class="string">&lt;trade_type&gt;<span class="subst">$&#123;trade_type&#125;</span>&lt;/trade_type&gt;</span></span><br><span class="line"><span class="string">&lt;sign&gt;<span class="subst">$&#123;sign&#125;</span>&lt;/sign&gt;</span></span><br><span class="line"><span class="string">&lt;/xml&gt;`</span>;</span><br><span class="line"><span class="keyword">var</span> Res = res;axios(&#123;  </span><br><span class="line">    method: <span class="string">&#x27;post&#x27;</span>,</span><br><span class="line">    url: addOrderUrl,</span><br><span class="line">    data: xml,</span><br><span class="line">    responseType: <span class="string">&#x27;text/xml&#x27;</span>,</span><br><span class="line">    headers: &#123;</span><br><span class="line">       <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;text/xml&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line"> &#125;).then( <span class="function"><span class="params">res</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(res)  </span><br><span class="line">    Res.send(res.data)</span><br><span class="line"> &#125;).catch( <span class="function"><span class="params">err</span>=&gt;</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log( err)&#125;)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><p>client_ip 参数 是客户端的ip地址，本来我是在后台获取客户端ip地址的，因为我们使用了nginx代理，req.ip 返回的都是 ::ffff:127.0.0.1 这是IPV6格式的字符串。网上有一个答案对此做出了解释： stackoverflow.com/questions/2…</p>
+<p>在这里，我用的一个网上的脚本在前台获取的， <a target="_blank" rel="noopener" href="http://pv.sohu.com/cityjson?ie=utf-8">http://pv.sohu.com/cityjson?ie=utf-8</a><br>使用方法： window.ipaddr = returnCitySN[‘cip’];<br>其他的参数，都是参考微信支付的要求去写的。</p>
+<h3 id="出现的错误"><a href="#出现的错误" class="headerlink" title="出现的错误"></a>出现的错误</h3><ul>
+<li><h3 id="XML格式错误"><a href="#XML格式错误" class="headerlink" title="XML格式错误"></a>XML格式错误</h3></li>
+</ul>
+<p><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/xml%E6%A0%BC%E5%BC%8F%E9%94%99%E8%AF%AF.png" alt="XML格式错误"></p>
+<p>而查看文档，原因是这样的<br><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/xml%E9%94%99%E8%AF%AF%E6%83%85%E5%86%B5.png" alt="XML格式错误情况"></p>
+<p>我：#&amp;(%#@+%)，也不给个详细点的说明…</p>
+<p>这种错误需要“顿悟”，我突然发现了我的错误。是我理解错了！我给body标签加了一个 <![CDATA[]]> 导致我的xml格式错误，其实是有detail字段才需要添加 &lt;[CDATA[]]&gt;， 其他的不需要。</p>
+<p>我：咳咳，低级错误。注意看文档，按照要求来，既不多添什么，也不要少什么。</p>
+<p>我把&lt;[CDATA[]]&gt;去掉之后，发现果真是这个原因，不再出现XML格式错误了，然而，还是高兴的太早，因为它报了签名错误。呵呵呵~</p>
+<ul>
+<li><h3 id="签名错误"><a href="#签名错误" class="headerlink" title="签名错误"></a>签名错误</h3></li>
+</ul>
+<p><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E7%AD%BE%E5%90%8D%E9%94%99%E8%AF%AF.png" alt="image"></p>
+<p>文档中说的签名计算很严格：<br>第一步，设所有发送或者接收到的数据为集合M，将集合M内非空参数值的参数按照参数名ASCII码从小到大排序（字典序），使用URL键值对的格式（即key1=value1&amp;key2=value2…）拼接成字符串stringA。</p>
+<p>特别注意以下重要规则：<br>第一步，设所有发送或者接收到的数据为集合M，将集合M内非空参数值的参数按照参数名ASCII码从小到大排序（字典序），使用URL键值对的格式（即key1=value1&amp;key2=value2…）拼接成字符串stringA。</p>
+<p>◆ 参数名ASCII码从小到大排序（字典序）；<br>◆ 如果参数的值为空不参与签名；<br>◆ 参数名区分大小写； （公众号支付全是小写）<br>◆ 验证调用返回或微信主动通知签名时，传送的sign参数不参与签名，将生成的签名与该sign值作校验。<br>◆ 微信接口可能增加字段，验证签名时必须支持增加的扩展字段</p>
+<p>第二步，在stringA最后拼接上key得到stringSignTemp字符串，并对stringSignTemp进行MD5运算，再将得到的字符串所有字符转换为大写，得到sign值signValue。</p>
+<p>◆ key设置路径：微信商户平台(pay.weixin.qq.com)–&gt;账户设置–&gt;API安全–&gt;密钥设置</p>
+<p>这里我查阅了一些资料，看到过有这样几种错误情况：<br>key 看错了，这里应该写商户的key,而这个key 是用户手动设置的，长32位。注意：自己保存一份，因为设置好了之后是没法打开查看的。</p>
+<p><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E8%AE%BE%E7%BD%AEapi%E5%AF%86%E9%92%A5.png" alt="image"><br>还有一种错误，我觉得很离谱啊，body里面不能有中文，然而，我把body中的文字改为英文，发现并不能改变现状，其实用中文是可以的。</p>
+<p>…</p>
+<p>总之，找到的这些错误，通通对我的情况没用！</p>
+<p>然后这又需要“顿悟”，原来stringA字符串我用了换行符把很长的字符隔开，这导致换行符被转换为Ascall码中的 \n 写进了签名里面，所以，sign错误，所以要么，把换行符通通去掉，要么用“”连接，舍弃。我把换行都去掉之后，就没有签名错误了。</p>
+<p>当当当当 ~</p>
+<p><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E6%AD%A3%E7%A1%AE.png" alt="image"></p>
+<p>终于完成了第一步，后台成功的返回了我们需要的prepay_id</p>
+<p>这里为了安全，对于返回sign，和发送的sign进行对比，完全相等之后，才能把结果返回给前台。</p>
+<ul>
+<li><h3 id="步骤二：调用微信js-sdk接口"><a href="#步骤二：调用微信js-sdk接口" class="headerlink" title="步骤二：调用微信js-sdk接口"></a>步骤二：调用微信js-sdk接口</h3></li>
+</ul>
+<p>微信支付</p>
+<p>发起一个微信支付请求</p>
+<p>前台收到的是xml数据，要先解析一下，得到prepay_id</p>
+<p>然后调用微信支付js-sdk，为了大家少走一些弯路，我先来正确的写法，关键步骤如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> &#123;prepay_id,appid&#125; = getInfo(res.data); <span class="comment">//从后台数据中获取appid 和 prepay_id</span></span><br><span class="line">nonceStr = getRanId(<span class="number">32</span>);</span><br><span class="line">timeStamp = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line"><span class="keyword">var</span> stringA = <span class="string">&quot;appId=&quot;</span>+appid+<span class="string">&quot;&amp;nonceStr=&quot;</span>+nonceStr+<span class="string">&quot;&amp;package=prepay_id=&quot;</span>+prepay_id+<span class="string">&quot;&amp;signType=MD5&amp;timeStamp=&quot;</span>+timeStamp;</span><br><span class="line"><span class="keyword">var</span> stringSignTemp = stringA+<span class="string">&quot;&amp;key=****#####jiaoyuguihuayuan----***&quot;</span>;</span><br><span class="line">paySign = md5(stringSignTemp).toUpperCase();</span><br><span class="line"><span class="built_in">window</span>.wx.chooseWXPay(&#123;</span><br><span class="line">    timestamp: timeStamp, <span class="comment">// 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符</span></span><br><span class="line">    nonceStr: nonceStr, <span class="comment">// 支付签名随机串，不长于 32 位</span></span><br><span class="line">    package: <span class="string">&quot;prepay_id=&quot;</span> + prepay_id, <span class="comment">// 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）</span></span><br><span class="line">    signType: <span class="string">&#x27;MD5&#x27;</span>, <span class="comment">// 签名方式，默认为&#x27;SHA1&#x27;，使用新版支付需传入&#x27;MD5&#x27;</span></span><br><span class="line">    paySign: paySign, <span class="comment">// 支付签名</span></span><br><span class="line">    success: <span class="function"><span class="keyword">function</span> (<span class="params">res</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 支付成功后的回调函数</span></span><br><span class="line">        <span class="built_in">console</span>.log(res)</span><br><span class="line">    &#125;,</span><br><span class="line">    fail: <span class="function"><span class="keyword">function</span>(<span class="params">err</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(err)  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>备注：prepay_id 通过微信支付统一下单接口拿到，paySign 采用统一的微信支付 Sign 签名生成方法，注意这里 appId 也要参与签名，appId 与 config 中传入的<br>appId 一致，即最后参与签名的参数有appId, timeStamp, nonceStr,<br>package, signType。</p>
+<h4 id="注意，我要讲个坑点"><a href="#注意，我要讲个坑点" class="headerlink" title="注意，我要讲个坑点~"></a>注意，我要讲个坑点~</h4><p>  <em>调用js</em>-sdk时，签名中的字段都是小驼峰的写法，timeStamp是这样写的，但是wx.config中，timestamp 是全小写的，所以，亲们，千万不要搞错了，我在这里就被坑了好一会呢。*</p>
+<p>写完签名之后，当你用微信web开发者工具去测试的话，就会看到，“不支持模拟”这样的提示。这个时候，不要犹豫，直接上真机去测试，这并不是我们的程序出现了问题。</p>
+<p><strong>小tips</strong>: 在真机上，我们是没有办法看到console出的一些调试信息，所以，要想个办法，可以用alert，也可以把调试信息打印在屏幕上面，我选择打印在屏幕上。这里要说一些，微信给的文档没有那么齐全，有一些是要试试才指导的，比如wx.config中的success和fail函数，参数信息怎么打印，其实是res.errMsg和err.errMsg.</p>
+<p>上面我说的这些你都注意到了，但是微信支付的控件你依然调动不起来的话，可能是微信商户平台的开发配置出现了问题，在产品中心-开发配置-支付配置-公众号支付<br>中进行配置，配置的时候，注意一定要到最后一级目录，比如我要在cms.123.456/book/list/index.html页面中去进行微信支付，那么你的配置应该是 cms.123.456/book/list/</p>
+<p>好了，开发中基本上所有的坑都提到了，这是建立在你配置没有出错的情况下。接下来，看看到底能不能真的支付。</p>
+<h2 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h2><p><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E7%A1%AE%E8%AE%A4%E8%AE%A2%E5%8D%95.jpg" alt="image"><br><img src="../imgs/%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98%E6%88%AA%E5%9B%BE/%E5%AE%8C%E6%88%90%E6%94%AF%E4%BB%98.png" alt="image"></p>
+<p>大功告成，让我想起了，最近流行的一句话，你这磨人的小妖精，微信支付！</p>
+<p>希望能给你们带来帮助~</p>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a style="display: inline-block;
+      word-break: break-word;" href="https://justsso.github.io/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/" title="一次痛苦又甜蜜的微信支付踩坑之旅" target="_blank" rel="external">https://justsso.github.io/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/justsso" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/justsso" target="_blank"><span class="text-dark">justsso</span><small class="ml-1x">前端程序媛</small></a></h3>
+        <div>记录学习与工作的地方</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/" title="create react app脚手架"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    
+  </ul>
+  
+  
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-fancy btn-donate pop-onhover bg-gradient-warning" data-toggle="modal" data-target="#donateModal"><span>赏</span></button>
+  <!-- <div class="wave-icon wave-icon-danger btn-donate" data-toggle="modal" data-target="#donateModal">
+    <div class="wave-circle"><span class="icon"><i class="icon icon-bill"></i></span></div>
+  </div> -->
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+<!-- Modal -->
+<div class="modal modal-center modal-small modal-xs-full fade" id="donateModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content donate">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <div class="modal-body">
+        <div class="donate-box">
+          <div class="donate-head">
+            <p>感谢您的支持，我会继续努力的!</p>
+          </div>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="alipay">
+              <div class="donate-payimg">
+                <img src="/images/donate/alipayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开支付宝扫一扫，即可进行扫码打赏哦</p>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="wechatpay">
+              <div class="donate-payimg">
+                <img src="/images/donate/wechatpayimg.png" alt="扫码支持" title="扫一扫" />
+              </div>
+              <p class="text-muted mv">扫码打赏，你说多少就多少</p>
+              <p class="text-grey">打开微信扫一扫，即可进行扫码打赏哦</p>
+            </div>
+          </div>
+          <div class="donate-footer">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#alipay" id="alipay-tab" role="tab" data-toggle="tab" aria-controls="alipay" aria-expanded="true"><i class="icon icon-alipay"></i> 支付宝</a>
+              </li>
+              <li role="presentation" class="">
+                <a href="#wechatpay" role="tab" id="wechatpay-tab" data-toggle="tab" aria-controls="wechatpay" aria-expanded="false"><i class="icon icon-wepay"></i> 微信支付</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/justsso" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
