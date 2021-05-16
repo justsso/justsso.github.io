@@ -17,21 +17,21 @@
   <meta http-equiv="window-target" content="_top" />
   
   
-  <title>微信公众平台经验分享 | justsso</title>
-  <meta name="description" content="微信公众平台经验 微信生态的繁荣与复杂也是并存的。2018年小程序和小游戏的火爆，也可以说明微信生态越来越繁荣，微信超级app给我们的生活带来了很多的便利，同时有很多的企业和自由工作者也依赖于微信的生态环境，发展公司和自己。  我接触微信开发快有一年了，对于微信的生态环境有一定的了解。主要做微信服务号的开发，也做过微信小程序的开发，微信公众号的开发，在工作过程中积累了很多的经验，记录在这片文">
+  <title>解决react中出现invalid host header问题 | justsso</title>
+  <meta name="description" content="解决react中出现invalid host header问题这是我在使用react框架开发中遇到的问题。 我本地的127.0.0.1或者localhost需要一个代理域名，否则无法向服务器请求访问。因为微信的js-sdk使用时，前台的域名必须是合法的【需要配置的白名单里面，白名单的检查方式是只检查域名】,所以需要配host,将 127.0.0.1 配到rockcms.ibt.tel 解决方法：在">
 <meta property="og:type" content="article">
-<meta property="og:title" content="微信公众平台经验分享">
-<meta property="og:url" content="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/index.html">
+<meta property="og:title" content="解决react中出现invalid host header问题">
+<meta property="og:url" content="https://justsso.github.io/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/index.html">
 <meta property="og:site_name" content="Justsso的博客">
-<meta property="og:description" content="微信公众平台经验 微信生态的繁荣与复杂也是并存的。2018年小程序和小游戏的火爆，也可以说明微信生态越来越繁荣，微信超级app给我们的生活带来了很多的便利，同时有很多的企业和自由工作者也依赖于微信的生态环境，发展公司和自己。  我接触微信开发快有一年了，对于微信的生态环境有一定的了解。主要做微信服务号的开发，也做过微信小程序的开发，微信公众号的开发，在工作过程中积累了很多的经验，记录在这片文">
+<meta property="og:description" content="解决react中出现invalid host header问题这是我在使用react框架开发中遇到的问题。 我本地的127.0.0.1或者localhost需要一个代理域名，否则无法向服务器请求访问。因为微信的js-sdk使用时，前台的域名必须是合法的【需要配置的白名单里面，白名单的检查方式是只检查域名】,所以需要配host,将 127.0.0.1 配到rockcms.ibt.tel 解决方法：在">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-15T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-05-10T08:03:06.071Z">
+<meta property="article:published_time" content="2018-10-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-05-16T15:15:18.472Z">
 <meta property="article:author" content="justsso">
 <meta property="article:tag" content="前端,javascript,react,redux,css,工程化">
 <meta name="twitter:card" content="summary">
   <!-- Canonical links -->
-  <link rel="canonical" href="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/index.html">
+  <link rel="canonical" href="https://justsso.github.io/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/index.html">
   
     <link rel="alternate" href="/atom.xml" title="Justsso的博客" type="application/atom+xml">
   
@@ -342,14 +342,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-微信开发-微信公众平台经验分享" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+  <article id="post-react实战-解决react中出现invalid host header 问题" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      微信公众平台经验分享
+      解决react中出现invalid host header问题
     </h1>
   
 
@@ -357,64 +357,24 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" class="article-date">
-	  <time datetime="2019-11-15T16:00:00.000Z" itemprop="datePublished">2019-11-16</time>
+	<a href="/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" class="article-date">
+	  <time datetime="2018-10-11T16:00:00.000Z" itemprop="datePublished">2018-10-12</time>
 	</a>
 </span>
         
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91/">微信开发</a>
-  </span>
-
         
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/#comments" class="article-comment-link">评论</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/#comments" class="article-comment-link">评论</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h1 id="微信公众平台经验"><a href="#微信公众平台经验" class="headerlink" title="微信公众平台经验"></a>微信公众平台经验</h1><blockquote>
-<p>微信生态的繁荣与复杂也是并存的。2018年小程序和小游戏的火爆，也可以说明微信生态越来越繁荣，微信超级app给我们的生活带来了很多的便利，同时有很多的企业和自由工作者也依赖于微信的生态环境，发展公司和自己。</p>
-</blockquote>
-<p>我接触微信开发快有一年了，对于微信的生态环境有一定的了解。主要做微信服务号的开发，也做过微信小程序的开发，微信公众号的开发，在工作过程中积累了很多的经验，记录在这片文章中。</p>
-<p>微信的生态环境的关系层级如下：</p>
-<ul>
-<li>微信开放平台<ul>
-<li>微信公众平台<ul>
-<li>订阅号</li>
-<li>服务号<ul>
-<li>公众号开发</li>
-</ul>
-</li>
-<li>小程序/小游戏</li>
-<li>企业微信</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p>在申请微信公众平台的时候，要了解每种账号类型可以做哪些事情，不可以做哪些事情，能不能满足你的需求，否则后期要改的话，费时费力，有可能前期的积累的粉丝都白费了。</p>
-<p>服务号的有更多的接口权限，以满足开发者的需求，有一些权限需求经过认证才可以，比如微信支付功能。</p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1445241432">微信公众平台技术文档</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/debug/">微信公众平台接口调试工具</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login">微信公众平台接口测试帐号申请</a></p>
-<p>通常微信服务号中内嵌很多网页，大多数是spa，获取用户的信息以满足业务开发。</p>
-<p>微信公众平台，就是管理微信服务号</p>
-<p>资源中心是微信开放平台开发者所需所有相关资源的汇集地，包括：</p>
-<ol>
-<li>移动应用开发</li>
-<li>网站应用开发</li>
-<li>公众帐号开发</li>
-<li>公众号服务开发</li>
-</ol>
-<p>用户向公众帐号发送消息时，公众帐号方收到的消息发送者是一个OpenID，是使用用户微信号加密后的结果，每个用户对每个公众帐号有一个唯一的OpenID。</p>
-<p>微信公众帐号接口只支持80接口。</p>
-<h2 id="UnionID-机制说明"><a href="#UnionID-机制说明" class="headerlink" title="UnionID 机制说明"></a>UnionID 机制说明</h2><p>如果开发者拥有多个移动应用、网站应用、和公众帐号（包括小程序），可通过 UnionID 来区分用户的唯一性，因为只要是同一个微信开放平台帐号下的移动应用、网站应用和公众帐号（包括小程序），用户的 UnionID 是唯一的。换句话说，同一用户，对同一个微信开放平台下的不同应用，unionid是相同的。</p>
-<p>开发过程中，可以申请一个测试号，微信这块做的也是很贴心了。<br><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=sandbox/login">登陆测试号</a></p>
+        <h1 id="解决react中出现invalid-host-header问题"><a href="#解决react中出现invalid-host-header问题" class="headerlink" title="解决react中出现invalid host header问题"></a>解决react中出现invalid host header问题</h1><p>这是我在使用react框架开发中遇到的问题。</p>
+<p>我本地的127.0.0.1或者localhost需要一个代理域名，否则无法向服务器请求访问。因为微信的js-sdk使用时，前台的域名必须是合法的【需要配置的白名单里面，白名单的检查方式是只检查域名】,所以需要配host,将 127.0.0.1 配到rockcms.ibt.tel</p>
+<p>解决方法：在config文件夹下的webpackDevServer.config.js 中，将disableHostCheck 的值改为 true</p>
 
       
     </div>
@@ -425,7 +385,7 @@
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
       <a style="display: inline-block;
-      word-break: break-word;" href="https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/" title="微信公众平台经验分享" target="_blank" rel="external">https://justsso.github.io/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%B9%B3%E5%8F%B0%E7%BB%8F%E9%AA%8C%E5%88%86%E4%BA%AB/</a>
+      word-break: break-word;" href="https://justsso.github.io/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/" title="解决react中出现invalid host header问题" target="_blank" rel="external">https://justsso.github.io/2018/10/12/react%E5%AE%9E%E6%88%98-%E8%A7%A3%E5%86%B3react%E4%B8%AD%E5%87%BA%E7%8E%B0invalid%20host%20header%20%E9%97%AE%E9%A2%98/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -472,12 +432,12 @@
   <ul class="pager pull-left">
     
     <li class="prev">
-      <a href="/2019/11/16/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E4%B9%8B%E7%99%BB%E9%99%86/" title="微信小程序开发经验之登录"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+      <a href="/2018/11/10/react%E5%AD%A6%E4%B9%A0-create%20react%20app%20%E8%84%9A%E6%89%8B%E6%9E%B6/" title="create react app脚手架"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
     </li>
     
     
     <li class="next">
-      <a href="/2019/11/12/react%E5%AD%A6%E4%B9%A0-Redux/" title="Redux"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2018/02/03/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91-H5%E5%BE%AE%E4%BF%A1%E6%94%AF%E4%BB%98/" title="一次痛苦又甜蜜的微信支付踩坑之旅"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
